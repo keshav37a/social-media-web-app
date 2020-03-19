@@ -5,6 +5,10 @@ const app = express();
 //use express router
 app.use('/', require('./routes/index'));
 
+//set ejs in view engine
+app.set('view engine', 'ejs');
+app.set('views', './views');
+
 app.listen(port, function(err){
     if(err){
         console.log(`Error: ${err}`);
