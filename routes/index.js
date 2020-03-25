@@ -7,6 +7,7 @@ console.log('router loaded');
 //In route.js further mapping has to be done router.get('/{text}', controller property)
 
 router.get('/', homeController.home);
+router.use('/signup', homeController.signup);
 router.use('/users', require('./users'));
 router.use('/posts', require('./posts'));
 
