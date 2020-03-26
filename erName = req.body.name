@@ -1,0 +1,73 @@
+[1mdiff --git a/controllers/users_controller.js b/controllers/users_controller.js[m
+[1mindex f8bf030..2522459 100644[m
+[1m--- a/controllers/users_controller.js[m
+[1m+++ b/controllers/users_controller.js[m
+[36m@@ -33,15 +33,21 @@[m [mmodule.exports.signup = function(req, res){[m
+ // For submission of signup form[m
+ module.exports.signupForm = function(req, res){[m
+     console.log(req.body);[m
+[32m+[m
+[32m+[m[32m    //If password and confirm password fields dont match then return[m
+     if(req.body.password != req.body.confirmPassword){[m
+         console.log("Passwords do not match");[m
+         return res.redirect('back');[m
+     }[m
+[32m+[m
+[32m+[m[32m    //If they do match then check if the user is already registered or not[m
+     User.findOne({email: req.body.email}, function(err, user){[m
+         if(err){[m
+             console.log('Error in finding user');[m
+             return;[m
+         }[m
+[32m+[m
+[32m+[m[32m    //If user entry is not found on the db by email then add the user in the db[m
+         if(!user){[m
+             User.create(req.body, function(err, user){[m
+                 if(err){[m
+[36m@@ -50,9 +56,7 @@[m [mmodule.exports.signupForm = function(req, res){[m
+                 }[m
+                 else{[m
+                     console.log('New User created');[m
+[31m-                    return res.render('home', {[m
+[31m-                        title: 'My Social Media Website'[m
+[31m-                    });[m
+[32m+[m[32m                    return res.redirect('/users/login');[m
+                 }[m
+             })[m
+         }[m
+[36m@@ -66,6 +70,35 @@[m [mmodule.exports.signupForm = function(req, res){[m
+ // For submission of login form[m
+ module.exports.loginForm = function(req, res){[m
+     console.log(req.body);[m
+[32m+[m[32m    let userName = req.body.name;[m
+[32m+[m[32m    let password = req.body.password;[m
+[32m+[m[32m    console.log(`Entered details in login form: username: ${userName}  password: ${password}`);[m
+[32m+[m[32m    User.findOne({email:userName}, function(err, user){[m
+[32m+[m[32m        if(err){[m
+[32m+[m[32m            console.log('Error in finding user by email in db');[m
+[32m+[m[32m            return res.redirect('back');[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        //If the user entry is found in the db for that email[m[41m [m
+[32m+[m[32m        if(user){[m
+[32m+[m[32m            console.log('User found');[m
+[32m+[m[32m            console.log('user: ', user);[m
+[32m+[m[32m            console.log(typeof(user));[m
+[32m+[m[32m            console.log('userPassword: ', user['password']);[m
+[32m+[m[32m            if(password===user.password){[m
+[32m+[m[32m                console.log('Sign In Successful');[m
+[32m+[m[32m            }[m
+[32m+[m[32m            else{[m
+[32m+[m[32m                console.log('Incorrect Password');[m
+[32m+[m[32m                return res.redirect('back');[m
+[32m+[m[32m            }[m
+[32m+[m[41m            [m
+[32m+[m[32m        }[m
+[32m+[m[32m        else{[m
+[32m+[m[32m            console.log('Username/Email doesnt exist');[m
+[32m+[m[32m            return res.redirect('back');[m
+[32m+[m[32m        }[m
+[32m+[m[32m    })[m
+     return res.render('home', {[m
+         title: 'My Social Media Website'[m
+     });[m

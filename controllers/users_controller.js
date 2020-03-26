@@ -33,15 +33,21 @@ module.exports.signup = function(req, res){
 // For submission of signup form
 module.exports.signupForm = function(req, res){
     console.log(req.body);
+
+    //If password and confirm password fields dont match then return
     if(req.body.password != req.body.confirmPassword){
         console.log("Passwords do not match");
         return res.redirect('back');
     }
+
+    //If they do match then check if the user is already registered or not
     User.findOne({email: req.body.email}, function(err, user){
         if(err){
             console.log('Error in finding user');
             return;
         }
+
+    //If user entry is not found on the db by email then add the user in the db
         if(!user){
             User.create(req.body, function(err, user){
                 if(err){
@@ -50,9 +56,7 @@ module.exports.signupForm = function(req, res){
                 }
                 else{
                     console.log('New User created');
-                    return res.render('home', {
-                        title: 'My Social Media Website'
-                    });
+                    return res.redirect('/users/login');
                 }
             })
         }
