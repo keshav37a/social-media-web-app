@@ -70,7 +70,49 @@ module.exports.signupForm = function(req, res){
 // For submission of login form
 module.exports.loginForm = function(req, res){
     console.log(req.body);
-    return res.render('home', {
-        title: 'My Social Media Website'
-    });
+
+    let userName = req.body.name;
+    let password = req.body.password;
+    console.log(`Entered details in login form: username: ${userName}  password: ${password}`);
+    // To check if user is present in the db or not
+    User.findOne({email:userName}, function(err, user){
+        if(err){
+            console.log('Error in finding user by email in db');
+            return res.redirect('back');
+        }
+
+        //If the user entry is found in the db for that email 
+        if(user){
+            console.log('User found');
+            console.log('user: ', user);
+            console.log(typeof(user));
+            console.log('userPassword: ', user['password']);
+
+            //If the password is correct then redirect to user profile page
+            if(password===user.password){
+                console.log('Sign In Successful');
+                res.cookie('user_id', user._id);
+                console.log('cookies ', req.cookies);
+                return res.render('user_profile', {
+                    title:'User/Profile', 
+                    name: user.name, 
+                    email: user.email, 
+                    createdAt: user.createdAt,
+                    updatedAt: user.updatedAt
+                });
+            }
+
+            //Handle Incorrect password
+            else{
+                console.log('Incorrect Password');
+                return res.redirect('back');
+            }      
+        }
+
+        //Handle wrong username / new user trying to login
+        else{
+            console.log('Username/Email doesnt exist');
+            return res.redirect('back');
+        }
+    })
 }
