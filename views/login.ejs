@@ -1,11 +1,9 @@
 <link rel="stylesheet" type="text/css" href="/css/login.css">
 <h1 id="website-header">Codeial: <%= title %></h1>
 <main>
-    <div>Login <a href="/users/login">here</a></div>
-    <div>Signup <a href="/users/signup">here</a></div>
-    <!-- <div class="forms-container flex row center">
+    <div class="forms-container flex row center">
         <div id="sign-in-div">
-            <form action="/login-submit" method="POST" id="sign-in-form" class="flex col center-al">
+            <form action="/users/create-session" method="POST" id="sign-in-form" class="flex col center-al">
                 <img id="welcome-img" src="/images/mr-bean.png" alt="welcome">
                 <div class="welcome-txt mar1">Welcome Bare Mortal</div>
                 <input type="email" placeholder="Username or Email" name="name" class="input-initial mar1 pad1" required>
@@ -22,5 +20,5 @@
                 </div>
             </form>
         </div>
-    </div> -->
+    </div>
 </main>

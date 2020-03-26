@@ -4,8 +4,3 @@ module.exports.home = function(req, res){
         title: 'My Social Media WebSite'});
 }
 
-module.exports.signup = function(req, res){
-    return res.render('signup', {
-        title: 'My Social Media Website'
-    });
-}
