@@ -1,2 +1,15 @@
 <link rel="stylesheet" type="text/css" href="/css/user_profile.css">
-<h1> Codeial/Profile Page </h1>
+<div class="flex row start">
+    <h1 id="main-heading"> Codeial/Profile Page </h1>
+    <div id="logout-div">
+        <a href="/users/logout">LogOut</a>
+    </div>
+</div>
+
+<div class="flex row start">
+    <div id="user-profile-container" class="flex col start-al">
+        <% for( let [k, v] of Object.entries(userInfo)) { %>
+        <div> <%= k %> : <%= v %> </div>
+        <% } %>
+    </div>
+</div>
