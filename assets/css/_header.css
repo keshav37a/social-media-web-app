@@ -1,0 +1,13 @@
+.flex{
+    display: flex;
+} 
+.row{
+    flex-direction: row;
+} 
+.start{
+    justify-content: start;
+}
+
+.grow{
+    flex-grow: 1;
+}

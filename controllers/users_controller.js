@@ -91,3 +91,10 @@ module.exports.createSession = function(req, res){
     console.log('create session controller called');
     return res.redirect('/');
 }
+
+//for signing out and destroying session
+module.exports.destroySession = function(req, res){
+    req.logout();
+    console.log('usersController.destroySession');
+    return res.redirect('/');
+}
