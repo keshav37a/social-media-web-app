@@ -22,6 +22,9 @@ module.exports.settings = function(req, res){
 
 //For rendering signin page
 module.exports.signin = function(req, res){
+    if(req.isAuthenticated()){
+        return res.redirect('/users/profile');
+    }
     console.log('usersController.signin');
     return res.render('signin', {
         title: 'Sign In Page'
@@ -30,6 +33,9 @@ module.exports.signin = function(req, res){
 
 // For rendering signup page
 module.exports.signup = function(req, res){
+    if(req.isAuthenticated()){
+        return res.redirect('/users/profile');
+    }
     console.log('usersController.signup');
     return res.render('signup', {
         title: 'My Social Media Website'
@@ -58,7 +64,7 @@ module.exports.createUser = function(req, res){
             User.create(req.body, function(err, user){
                 if(err){
                     console.log('Error in creating user in signup');
-                    
+
                     return;
                 }
                 else{
