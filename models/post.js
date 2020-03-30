@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 var postSchema = new mongoose.Schema({
     content:{
         type: String,
-        required
+        required: true
     },
     user:{
         type: mongoose.Schema.Types.ObjectId,
