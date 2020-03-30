@@ -1,5 +1,9 @@
-<link rel="stylesheet" type="text/css" href="/css/login.css">
+<link rel="stylesheet" type="text/css" href="/css/home.css">
 <h1 id="website-header">Codeial Home Page: <%= title %></h1>
-<main>
-    
-</main>
+<section id="feed-posts">
+    <h4>Posts</h4>
+    <form action="/posts/create-post" method="POST" >
+        <textarea name="content" cols="30" rows="4" placeholder="Type Here"></textarea>
+        <button type="submit">Submit Post</button>
+    </form>
+</section>

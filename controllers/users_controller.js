@@ -98,3 +98,6 @@ module.exports.destroySession = function(req, res){
     console.log('usersController.destroySession');
     return res.redirect('/');
 }
+
+
+

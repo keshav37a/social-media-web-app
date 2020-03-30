@@ -1,0 +1,14 @@
+body {
+  margin: auto; }
+
+#feed-posts {
+  text-align: center; }
+
+.flex {
+  display: flex; }
+
+.col {
+  flex-direction: column; }
+
+.start {
+  align-items: start; }
