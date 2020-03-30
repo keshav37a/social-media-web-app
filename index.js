@@ -14,6 +14,17 @@ const passportLocal = require('./config/passport-local-strategy');
 //For local db storage of session cookie so that sign in persists after restarting server
 const MongoStore = require('connect-mongo')(session);
 
+//sass middleware for scss
+const sassMiddleware = require('node-sass-middleware');
+//need to use sassMiddleware before the server starts
+
+app.use(sassMiddleware({
+    src: './assets/scss',
+    dest: './assets/css',
+    debug: true,
+    outputStyle: 'extended',
+    prefix: '/css'
+}))
 
 app.use(express.urlencoded());
 
