@@ -1,9 +1,33 @@
 <link rel="stylesheet" type="text/css" href="/css/home.css">
 <h1 id="website-header">Codeial Home Page: <%= title %></h1>
-<section id="feed-posts">
-    <h4>Posts</h4>
-    <form action="/posts/create-post" method="POST" >
-        <textarea name="content" cols="30" rows="4" placeholder="Type Here"></textarea>
-        <button type="submit">Submit Post</button>
-    </form>
-</section>
+
+<main id="main-content">
+    <section id="feed-posts">
+        <h4>Posts</h4>
+    
+        <%  if(locals.user) { %> 
+                <form action="/posts/create-post" method="POST">
+                <textarea name="content" cols="30" rows="4" placeholder="Type Here"></textarea>
+                <button type="submit">Submit Post</button>
+                </form>         
+                <br>
+             <% }
+        %>
+        
+    
+        <div id="posts-feed-container">
+            <%  for(let i of posts) 
+                {%>
+                    <div class="single-post-container">
+                        <div><%= i.content %></div>
+                        <div><%= i.user.name %></div>
+                        <div class="date-created"><%= i.createdAt %></div>
+                    </div>
+                <%} 
+            %>
+        </div>
+    </section>
+</main>
+
+
+<script src="/js/home.js"></script>
