@@ -23,6 +23,18 @@
                         <div><%= i.user.name %></div>
                         <div class="date-created"><%= i.createdAt %></div>
                     </div>
+
+                    <% 
+                        if(locals.user) 
+                        {%> 
+                            <div>
+                                <form method="POST" action="/comments/post-comment/?post=<%= i._id %>&user=<%= locals.user._id %>">
+                                    <textarea name="content" cols="30" rows="1"></textarea>
+                                    <button type="submit">Post Comment</button>
+                                </form>
+                            </div>    
+                        <%}
+                    %>
                 <%} 
             %>
         </div>
