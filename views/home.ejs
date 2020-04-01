@@ -21,7 +21,12 @@
                     <div class="single-post-container">
                         <div class="post-delete-container">
                             <div class="post-content"><%= i.content %></div>
-                            <button type="submit">Delete Post</button>
+                            <%  
+                                if((locals.user) && (i.user._id.toString() == locals.user._id.toString())) {
+                                %>
+                                    <button type="submit">Delete Post</button>
+                                <%}
+                            %>
                         </div>
                         
                         <div><%= i.user.name %></div>

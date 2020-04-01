@@ -88,3 +88,4 @@ app.listen(port, function(err){
 //If no file found error then check current directory or check require modules
 //Passport requires callback method - callback method should be outside the brackets '{}' as another arguement of the constructor
 //Passport.use was not getting called. It was because I had given wrong name="" in input tag of email in the signin.ejs view. So it was not getting the value for the missing variable so it ws not calling the method. Fuck my life. I spent a whole day looking for the problem :(
+//To compare two object ids with same reference in ejs first convert them to string using toString()

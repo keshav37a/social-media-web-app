@@ -23,7 +23,7 @@ module.exports.home = function(req, res){
             console.log(posts);
             return res.render('home', {
                 title:'Posts', 
-                posts: posts
+                posts: posts,
             })
         });
 }
