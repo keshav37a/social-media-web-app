@@ -18,58 +18,14 @@
         <div id="posts-feed-container">
             <%  for(let i of posts) 
                 {%>
-                    <div class="single-post-container">
-                        <div class="item-delete-container">
-                            <form method="POST" action="/posts/delete-post/?postOwner=<%=i.user._id%>&postId=<%=i._id%>">
-                                <div class="content"><%= i.content %></div>
-                                <%  
-                                    if((locals.user) && (i.user._id.toString() == locals.user._id.toString())) {
-                                    %>
-                                        <button type="submit">Delete Post</button>
-                                    <%}
-                                %>
-                            </form>
-                        </div>
-                        
-                        <div><%= i.user.name %></div>
-                        <div class="date-created"><%= i.createdAt %></div>
-
-                        <% 
-                            if(locals.user) 
-                            {%> 
-                                <div>
-                                    <form method="POST" action="/comments/post-comment/?post=<%= i._id %>&user=<%= locals.user._id %>">
-                                        <textarea name="content" cols="30" rows="1"></textarea>
-                                        <button type="submit">Post Comment</button>
-                                    </form>
-                                </div>    
-                            <%}
-                        %>
-
-                        <div class="comments-container">
-                        <% 
-                            for(let j of i.comments) 
-                            {%> <div class="single-comment-container">
-                                    <div class="item-delete-container">
-                                        <form method="POST" action="/comments/delete-comment/?cId=<%=j._id%>&pId=<%=i._id%>&uId=<%=j.user._id%>">
-                                            <div class="content"><%=j.content%></div>
-                                            <%
-                                                if((locals.user) && (j.user._id.toString() == locals.user._id.toString())) {%> 
-                                                    <button type="submit">Delete Comment</button> 
-                                                <%}
-                                            %>
-                                        </form>        
-                                    </div>
-                                    <div><%=j.user.name%></div>
-                                    <div class="date-created"><%=j.createdAt%></div>
-                                </div>
-                            <%} 
-                        %>
-                        </div>
-                    </div>
+                    <%- include("_post", {i:i}) %> 
                 <%} 
             %>
         </div>
+    </section>
+
+    <section id="friends-container">
+        
     </section>
 </main>
 

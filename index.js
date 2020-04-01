@@ -90,3 +90,4 @@ app.listen(port, function(err){
 //Passport.use was not getting called. It was because I had given wrong name="" in input tag of email in the signin.ejs view. So it was not getting the value for the missing variable so it ws not calling the method. Fuck my life. I spent a whole day looking for the problem :(
 //To compare two object ids with same reference in ejs first convert them to string using toString()
 //Convert objectId taken from locals.user to string before comparing
+//Getting error i not defined in case of partials. Use  <%- include("_post", {i:i}) %> for passing context to the partial
