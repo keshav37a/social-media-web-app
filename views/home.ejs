@@ -19,8 +19,8 @@
             <%  for(let i of posts) 
                 {%>
                     <div class="single-post-container">
-                        <div class="post-delete-container">
-                            <div class="post-content"><%= i.content %></div>
+                        <div class="item-delete-container">
+                            <div class="content"><%= i.content %></div>
                             <%  
                                 if((locals.user) && (i.user._id.toString() == locals.user._id.toString())) {
                                 %>
@@ -48,7 +48,15 @@
                         <% 
                             for(let j of i.comments) 
                             {%> <div class="single-comment-container">
-                                    <div><%=j.content%></div>
+                                    <div class="item-delete-container">
+                                        <div class="content"><%=j.content%></div>
+                                        <%
+                                            if((locals.user) && (j.user._id.toString() == locals.user._id.toString())) {%> 
+                                                <button type="submit">Delete Comment</button> 
+                                            <%}
+                                        %>
+                                    </div>
+                                    
                                     <div><%=j.user.name%></div>
                                     <div class="date-created"><%=j.createdAt%></div>
                                 </div>

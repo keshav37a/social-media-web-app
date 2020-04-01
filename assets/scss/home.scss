@@ -25,15 +25,13 @@ body{
     margin-bottom: 0.5rem;
 }
 
-.post-delete-container{
+.item-delete-container{
     display: flex;
     flex-direction: row;
     align-items: start;
-
-    .post-content{
-        flex-grow: 1;
-    }
-
+}
+.content{
+    flex-grow: 1;
 }
 
 .flex{

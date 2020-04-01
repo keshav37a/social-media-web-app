@@ -16,12 +16,13 @@ body h1 {
   margin-left: 2rem;
   margin-bottom: 0.5rem; }
 
-.post-delete-container {
+.item-delete-container {
   display: flex;
   flex-direction: row;
   align-items: start; }
-  .post-delete-container .post-content {
-    flex-grow: 1; }
+
+.content {
+  flex-grow: 1; }
 
 .flex {
   display: flex; }
