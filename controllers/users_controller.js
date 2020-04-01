@@ -6,10 +6,19 @@ const User = require('../models/user');
 
 // For rendering User Profile
 module.exports.profile = function(req, res){
-    console.log('usersController.profile');
-    return res.render('user_profile', {
-        title: 'UserName Profile'
-    });
+    console.log(req.query);
+    let userId = req.query.uId;
+    User.findById(userId, function(err, user){
+        if(err){
+            console.log(`${err}`);
+            return;
+        }
+        console.log('usersController.profile');
+        return res.render('user_profile', {
+            title: 'UserName Profile',
+            currUser: user
+        });
+    })
 }
 
 // For rendering User Settings

@@ -2,6 +2,13 @@
 <h1 id="website-header">Codeial Home Page: <%= title %></h1>
 
 <main id="main-content">
+    <section id="friends-container">
+        <h4>Friends</h4>
+        <% for(let user of userAll) {%> 
+                <p><a href="/users/profile/?uId=<%=user._id%>"><%=user.name%></a></p>     
+            <%} 
+        %>
+    </section>
     <section id="feed-posts">
         <h4>Posts</h4>
     
@@ -24,9 +31,7 @@
         </div>
     </section>
 
-    <section id="friends-container">
-        
-    </section>
+    
 </main>
 
 

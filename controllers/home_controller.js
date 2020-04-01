@@ -1,4 +1,5 @@
 const Posts = require('../models/post');
+const User = require('../models/user');
 
 module.exports.home = function(req, res){
     console.log('home-controller.home');
@@ -6,6 +7,8 @@ module.exports.home = function(req, res){
     // console.log('req-cookies:', req.cookies);
     // res.cookie('name', 'hehehe');
     // console.log('res-cookies:', res.cookies);
+    let userAll = [];
+    
 
     Posts.find({}).sort({createdAt:-1})
         .populate('user')
@@ -21,10 +24,18 @@ module.exports.home = function(req, res){
                 return;
             }
             console.log(posts);
-            return res.render('home', {
-                title:'Posts', 
-                posts: posts,
+            User.find({}, function(err, users){
+                if(err){
+                    console.log(`${err}`);
+                    return;
+                }
+                return res.render('home', {
+                    title:'Posts', 
+                    posts: posts,
+                    userAll: users
+                })
             })
         });
-}
+    
 
+}
