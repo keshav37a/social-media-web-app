@@ -8,9 +8,9 @@ module.exports.postComment = function(req, res){
     let postId = req.query.post;
     let userId = req.query.user;
     let content = req.body.content;
-    console.log(`req.query for post comment: ${postId}`);
-    console.log(`req.query for user id: ${userId}`);
-    console.log(`req.query for user id: ${content}`);
+    // console.log(`req.query for post comment: ${postId}`);
+    // console.log(`req.query for user id: ${userId}`);
+    // console.log(`req.query for user id: ${content}`);
 
     Post.findById(postId, function(err, post){
         if(err){
@@ -40,30 +40,48 @@ module.exports.postComment = function(req, res){
         }
 
     })
+}
 
-    // Comment.create({
-    //     content: req.body.content,
-    //     user: userId,
-    //     post: postId
-    // }, function(err, comment){
-    //     if(err){
-    //         console.log(`error in inserting comment in db ${err}`);
-    //         return;
-    //     }
-    //     if(comment){
-    //         console.log('comment added in comments table in db ');
-    //         Post.findByIdAndUpdate(postId, {
-    //             $push: {comments: comment._id}
-    //         }, function(err, comment_){
-    //             if(err){
-    //                 console.log(`error in updating/pushing comments in post table ${err}`);
-    //                 return;
-    //             }
-    //             if(comment_){
-    //                 console.log('comment pushed in posts table in db');
-    //             }
-    //         })
-    //     }
+module.exports.deleteComment = function(req, res){
+    console.log('deleteComment in comments_controller called');
+    console.log(req.query);
+    let loggedInUserId = req.user._id;
+    let commentId = req.query.cId;
+    let postId = req.query.pId;
+    let userId = req.query.uId;
+
+    console.log(`commentId: ${commentId} postId ${postId} userId ${userId} loggedInUserId ${loggedInUserId}`);
+
+    if(loggedInUserId.toString() == userId){
+        console.log('authorized to delete');
         
-    // })
+        Post.findByIdAndUpdate(postId, {$pull: {comments: commentId}}, function(err, post){
+            if(err){
+                console.log(`${err}`);
+            }
+        })
+
+        Comment.findByIdAndDelete(commentId, function(err, comment){
+            if(err){
+                console.log(`${err}`);
+                return;
+            }
+        })    
+        return res.redirect('/');
+        // Post.findById(postId, function(err, post){
+        //     if(err){
+        //         console.log(`${err}`);
+        //         return;
+        //     }
+        //     if(post){
+        //         for(let i of post.comments._id){
+                    
+        //         }
+        //     }
+        // })
+    }
+    else{
+        console.log('not authorized to delete');
+        return res.redirect('/');
+    }
 }

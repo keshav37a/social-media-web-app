@@ -51,14 +51,15 @@
                             for(let j of i.comments) 
                             {%> <div class="single-comment-container">
                                     <div class="item-delete-container">
-                                        <div class="content"><%=j.content%></div>
-                                        <%
-                                            if((locals.user) && (j.user._id.toString() == locals.user._id.toString())) {%> 
-                                                <button type="submit">Delete Comment</button> 
-                                            <%}
-                                        %>
+                                        <form method="POST" action="/comments/delete-comment/?cId=<%=j._id%>&pId=<%=i._id%>&uId=<%=j.user._id%>">
+                                            <div class="content"><%=j.content%></div>
+                                            <%
+                                                if((locals.user) && (j.user._id.toString() == locals.user._id.toString())) {%> 
+                                                    <button type="submit">Delete Comment</button> 
+                                                <%}
+                                            %>
+                                        </form>        
                                     </div>
-                                    
                                     <div><%=j.user.name%></div>
                                     <div class="date-created"><%=j.createdAt%></div>
                                 </div>
