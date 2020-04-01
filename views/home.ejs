@@ -19,22 +19,41 @@
             <%  for(let i of posts) 
                 {%>
                     <div class="single-post-container">
-                        <div><%= i.content %></div>
+                        <div class="post-delete-container">
+                            <div class="post-content"><%= i.content %></div>
+                            <button type="submit">Delete Post</button>
+                        </div>
+                        
                         <div><%= i.user.name %></div>
                         <div class="date-created"><%= i.createdAt %></div>
+
+                        <% 
+                            if(locals.user) 
+                            {%> 
+                                <div>
+                                    <form method="POST" action="/comments/post-comment/?post=<%= i._id %>&user=<%= locals.user._id %>">
+                                        <textarea name="content" cols="30" rows="1"></textarea>
+                                        <button type="submit">Post Comment</button>
+                                    </form>
+                                </div>    
+                            <%}
+                        %>
+
+                        <div class="comments-container">
+                        <% 
+                            for(let j of i.comments) 
+                            {%> <div class="single-comment-container">
+                                    <div><%=j.content%></div>
+                                    <div><%=j.user.name%></div>
+                                    <div class="date-created"><%=j.createdAt%></div>
+                                </div>
+                            <%} 
+                        %>
+                        </div>
                     </div>
 
-                    <% 
-                        if(locals.user) 
-                        {%> 
-                            <div>
-                                <form method="POST" action="/comments/post-comment/?post=<%= i._id %>&user=<%= locals.user._id %>">
-                                    <textarea name="content" cols="30" rows="1"></textarea>
-                                    <button type="submit">Post Comment</button>
-                                </form>
-                            </div>    
-                        <%}
-                    %>
+                    
+                    
                 <%} 
             %>
         </div>

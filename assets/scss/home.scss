@@ -16,8 +16,24 @@ body{
 
 #posts-feed-container{
     .single-post-container{
-        margin-bottom: 1rem;
+        margin-bottom: 5rem;
     }
+}
+
+.single-comment-container{
+    margin-left: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.post-delete-container{
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+
+    .post-content{
+        flex-grow: 1;
+    }
+
 }
 
 .flex{
