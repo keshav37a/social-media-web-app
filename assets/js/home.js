@@ -1,7 +1,7 @@
 console.log('Home Script Loaded');
 var datesCollection = document.getElementsByClassName('date-created');
 console.log(`datesCollection : ${typeof(datesCollection)} ${datesCollection}`);
-
+dateFormatting(datesCollection);
 
 function dateFormatting(datesCollection){
     for (item of datesCollection){
