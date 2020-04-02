@@ -22,12 +22,14 @@ module.exports.postComment = async function(req, res){
             console.log(`createdComment: ${createdComment}`);
             foundPost.comments.push(createdComment);
             await foundPost.save();    
+            req.flash('success', 'Comment added');    
         } 
         catch (err) {
             console.log(`${err}`);
         }
     }
     else{
+        req.flash('error', 'Post not found');    
         console.log(`Post not found`);
     }
     return res.redirect('/');
@@ -51,12 +53,14 @@ module.exports.deleteComment = async function(req, res){
             let deletedCommentPromise = Comment.findByIdAndDelete(commentId);
             const updatedPost = await updatedPostPromise;
             const deletedComment = await deletedCommentPromise;
+            req.flash('success', 'Comment removed');    
         } 
         catch (error) {
             console.log(`${error}`);
         }
     }
     else{
+        req.flash('error', 'Unauthorized');    
         console.log('not authorized to delete');
     }
     return res.redirect('/');

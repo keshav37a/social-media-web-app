@@ -6,18 +6,20 @@ console.log('passport local strategy loaded');
 
 //authentication using passport
 passport.use(new LocalStrategy({
-    usernameField:'email'},
-    function(email, password, done){
+    usernameField:'email',
+    passReqToCallback: true},
+    function(req, email, password, done){
         console.log('inside passport.use');
         //find a user and establish an identity
         User.findOne({email:email}, function(err, user){
             if(err){
-                console.log('Error finding user in db --- Passport.js');
+                req.flash('error', err);
                 return done(err);
             }
 
             //If user is not found in the db or username incorrect
-            if(!user){
+            if(!user || user.password != password){
+                req.flash('error', 'Incorrect username/password');
                 console.log('User does not exist --- Passport.js');
                 return done(null, false);
             }

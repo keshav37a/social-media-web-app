@@ -7,8 +7,12 @@ module.exports.createPost = async function(req, res){
     console.log(req.cookies);
 
     try {
-        await Post.create({content: req.body.content,
+        let post = await Post.create({content: req.body.content,
                             user: req.user._id});
+        if(post)
+            req.flash('success', 'Post published');    
+        else
+            req.flash('error', 'Failed to publish post');    
     } 
     catch (error) {
         console.log(`${error}`);
@@ -38,6 +42,7 @@ module.exports.deletePost = async function(req, res){
                 }
             }
             foundPost.remove();
+            req.flash('success', 'Post and associated comments removed');    
         }
         catch (error) {
             console.log(`${error}`);
@@ -45,6 +50,7 @@ module.exports.deletePost = async function(req, res){
     } 
     else
     {
+        req.flash('error', 'Unauthorized');    
         console.log('not authorised to delete');
     }    
 

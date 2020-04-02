@@ -69,17 +69,20 @@ module.exports.createUser = async function(req, res){
         if(!user){
             let createdUser = await User.create(req.body);
             if(createdUser){
-                console.log('User created');
+                req.flash('success', 'User created');
                 return res.redirect('/users/signin');
             }
         }
         else{
             console.log('User already exists');
+            req.flash('error', 'User already exists');
             return res.redirect('back');
         }    
     } 
     catch (err) {
+        req.flash('error', err);
         console.log(`${err}`);   
+        return res.redirect('back');
     }
 }
 
@@ -87,14 +90,15 @@ module.exports.createUser = async function(req, res){
 module.exports.createSession = function(req, res){
     //Using passport library
     console.log('usersController.createSession');
-    console.log('create session controller called');
+    req.flash('success', 'Logged In Successfully');
     return res.redirect('/');
 }
 
 //for signing out and destroying session
 module.exports.destroySession = function(req, res){
-    req.logout();
     console.log('usersController.destroySession');
+    req.logout();
+    req.flash('success', 'Logged Out Successfully');
     return res.redirect('/');
 }
 
@@ -114,11 +118,14 @@ module.exports.updateProfile = async function(req, res){
                 console.log(`update user fields: ${updatedUser.name} ${updatedUser.email}`);    
         } 
         catch (error) {
+            req.flash('error', 'Error in updating profile. Please try again later');
             console.log(`${error}`);
         }
+        req.flash('success', 'Profile Updated Successfully');
         return res.redirect('/');
     }
     else{
+        req.flash('error', 'Unauthorized');
         return res.status(401).send('Unauthorized');
     }
 }
