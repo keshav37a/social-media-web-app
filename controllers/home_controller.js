@@ -7,7 +7,6 @@ module.exports.home = function(req, res){
     // console.log('req-cookies:', req.cookies);
     // res.cookie('name', 'hehehe');
     // console.log('res-cookies:', res.cookies);
-    let userAll = [];
     
 
     Posts.find({}).sort({createdAt:-1})

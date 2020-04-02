@@ -91,3 +91,4 @@ app.listen(port, function(err){
 //To compare two object ids with same reference in ejs first convert them to string using toString()
 //Convert objectId taken from locals.user to string before comparing
 //Getting error i not defined in case of partials. Use  <%- include("_post", {i:i}) %> for passing context to the partial
+//syntaxerror missing catch or finally after try while compiling ejs - error in opening or closing bracket in if() in ejs file

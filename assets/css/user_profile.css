@@ -1,2 +1,26 @@
 body {
   background-color: lightblue; }
+
+.update-field-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  width: 50%;
+  margin: 1rem; }
+  .update-field-container form {
+    width: 100%; }
+  .update-field-container div input, .update-field-container div button {
+    margin-top: 1rem; }
+
+.profile-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; }
+
+.grow {
+  flex-grow: 1; }
+
+.fields-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: start; }

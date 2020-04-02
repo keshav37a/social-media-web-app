@@ -1,13 +1,15 @@
 <div class="single-post-container">
-    <div class="item-delete-container">
+    <div>
         <form method="POST" action="/posts/delete-post/?postOwner=<%=i.user._id%>&postId=<%=i._id%>">
-            <div class="content"><%= i.content %></div>
-            <%  
-                if((locals.user) && (i.user._id.toString() == locals.user._id.toString())) 
-                {%>
-                    <button type="submit">Delete Post</button>
-                <%}
-            %>
+            <div class="item-delete-container">
+                <div class="content"><%= i.content %></div>
+                <%  
+                    if((locals.user) && (i.user._id.toString() == locals.user._id.toString())) 
+                    {%>
+                        <div><button type="submit">Delete Post</button></div>
+                    <%}
+                %>
+            </div>    
         </form>
     </div>
 

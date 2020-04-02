@@ -3,7 +3,8 @@ body h1 {
 
 section {
   width: 50%;
-  margin-left: 1rem; }
+  margin-left: 1rem;
+  margin-right: 1rem; }
 
 #main-content {
   display: flex;
@@ -14,11 +15,13 @@ section {
   margin-left: 1rem; }
 
 #posts-feed-container .single-post-container {
-  margin-bottom: 5rem; }
+  margin-bottom: 5rem;
+  background-color: lightblue; }
 
 .single-comment-container {
   margin-left: 2rem;
-  margin-bottom: 0.5rem; }
+  margin-bottom: 0.5rem;
+  background-color: lightgreen; }
 
 .item-delete-container {
   display: flex;

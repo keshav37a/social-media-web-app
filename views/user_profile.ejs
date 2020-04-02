@@ -1,5 +1,45 @@
 <link rel="stylesheet" type="text/css" href="/css/user_profile.css">
 <h1> Codeial/Profile Page </h1>
 
-<p><%= currUser.name %></p>
-<p><%= currUser.email %></p>
+<section id="user-profile">
+    <div class="profile-col">
+        <div class="update-field-container">
+            <%
+                if(locals.user._id.toString()==currUser._id.toString()) 
+                {%> 
+                    <form method="POST" action="/users/profile/update/?uId=<%=locals.user_id%>">
+                        <div class="fields-container">
+                            <div class="field grow">
+                                <input type="text" value="<%=locals.user.name%>" size="30">
+                            </div> 
+                            <div class="field">
+                                <div><button>Update Name</button></div>    
+                            </div>   
+                        </div>
+                        <div class="fields-container">
+                            <div class="field grow">
+                                <input type="text" value="<%=locals.user.email%>" size="30">
+                            </div> 
+                            <div class="field">
+                                <div><button>Update Email</button></div>    
+                            </div>   
+                        </div>
+                    </form>
+                <%}
+                else 
+                {%> 
+                    <div class="fields-container">
+                        <div class="field">
+                            <%=currUser.name%>
+                        </div> 
+                        <div class="field">
+                            <div><%=currUser.name%></div>
+                        </div> 
+                    </div>
+                <%}
+            %>
+        </div>
+    </div>
+</section>
+
+

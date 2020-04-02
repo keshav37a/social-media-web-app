@@ -6,7 +6,6 @@ const User = require('../models/user');
 
 // For rendering User Profile
 module.exports.profile = function(req, res){
-    console.log(req.query);
     let userId = req.query.uId;
     User.findById(userId, function(err, user){
         if(err){
