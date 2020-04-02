@@ -108,4 +108,30 @@ module.exports.destroySession = function(req, res){
 }
 
 
+//for updating fields in profile form
+module.exports.updateProfile = function(req, res){
+    console.log('userController.updateProfile called');
+    let userId = req.query.uId; 
+    let name = req.body.name;
+    let email = req.body.email;
+    console.log(`${req.query}    ${userId} `);
+    console.log(req.body);
 
+    if(req.user._id.toString()==userId){
+        User.findByIdAndUpdate(userId, {name: name, email: email}, function(err, user){
+            if(err){
+                console.log(`${err}`);
+                return;
+            }
+            if(user){
+                console.log(`update user fields: ${user.name} ${user.email}`);
+            }
+            return res.redirect('/');
+        })
+    }
+    else{
+        return res.status(401).send('Unauthorized');
+    }
+
+    
+}

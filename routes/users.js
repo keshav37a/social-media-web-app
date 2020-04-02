@@ -22,4 +22,7 @@ router.post('/create-session', passport.authenticate(
 
 router.get('/sign-out', userController.destroySession);
 
+//for updating profile
+router.post('/profile/update/', passport.checkAuthentication, userController.updateProfile);
+
 module.exports = router;

@@ -7,22 +7,19 @@
             <%
                 if(locals.user._id.toString()==currUser._id.toString()) 
                 {%> 
-                    <form method="POST" action="/users/profile/update/?uId=<%=locals.user_id%>">
+                    <form method="POST" action="/users/profile/update/?uId=<%=currUser._id%>">
                         <div class="fields-container">
                             <div class="field grow">
-                                <input type="text" value="<%=locals.user.name%>" size="30">
-                            </div> 
-                            <div class="field">
-                                <div><button>Update Name</button></div>    
-                            </div>   
+                                <input type="text" name="name" value="<%=locals.user.name%>" size="30" placeholder="Your Name" required>
+                            </div>    
                         </div>
                         <div class="fields-container">
                             <div class="field grow">
-                                <input type="text" value="<%=locals.user.email%>" size="30">
+                                <input type="email" name="email" value="<%=locals.user.email%>" size="30" placeholder="Your Email" required>
                             </div> 
-                            <div class="field">
-                                <div><button>Update Email</button></div>    
-                            </div>   
+                        </div>
+                        <div class="fields-container">
+                            <div><button type="submit">Submit</button></div>
                         </div>
                     </form>
                 <%}
@@ -33,7 +30,7 @@
                             <%=currUser.name%>
                         </div> 
                         <div class="field">
-                            <div><%=currUser.name%></div>
+                            <div><%=currUser.email%></div>
                         </div> 
                     </div>
                 <%}
