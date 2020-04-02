@@ -1,24 +1,23 @@
 const Post = require('../models/post');
 const Comment = require('../models/comment');
 
-module.exports.createPost = function(req, res){
+module.exports.createPost = async function(req, res){
     console.log('create post in post_controller called');
     console.log(req.body);
     console.log(req.cookies);
 
-    Post.create({
-        content: req.body.content, 
-        user: req.user._id
-    }, function(err, post){
-        if(err){
-            console.log('error in creating a post');
-            return ;
-        }
-        return res.redirect('/');
-    })
+    try {
+        await Post.create({content: req.body.content,
+                            user: req.user._id});
+    } 
+    catch (error) {
+        console.log(`${error}`);
+    }
+    
+    return res.redirect('/');
 }
 
-module.exports.deletePost = function(req, res){
+module.exports.deletePost = async function(req, res){
     console.log('delete post in posts_controller called');
     console.log(req.query);
     let postOwnerId = req.query.postOwner;
@@ -27,27 +26,27 @@ module.exports.deletePost = function(req, res){
     console.log(`postOwnerId = ${postOwnerId}   authUserId = ${authUserId}   postId = ${postId}`);
     if(postOwnerId === authUserId.toString()){
         console.log('authorised to delete');
-        Post.findByIdAndDelete(postId, function(err, post){
-            if(err){
-                console.log(`error in finding post id in db`);
-                return;
-            }
-            if(post){
-                let comments = post.comments;
+        try {
+            let foundPost = await Post.findById(postId);
+            console.log(`foundPost: ${foundPost}`);
+        // let deletedPost = await Post.findByIdAndDelete(postId);
+           if(foundPost){
+                let comments = foundPost.comments;
                 for(let i of comments){
-                    Comment.findByIdAndDelete(i._id, function(err, comment){
-                        if(err){
-                            console.log(`error in finding comments to delete in db`);
-                            return;
-                        }
-                    })
+                    let deletedComment = await Comment.findByIdAndDelete(i._id);
+                    console.log(`deletedComment: ${deletedComment}`);
                 }
             }
-            return res.redirect('/');
-        })
-    }
-    else{
+            foundPost.remove();
+        }
+        catch (error) {
+            console.log(`${error}`);
+        }   
+    } 
+    else
+    {
         console.log('not authorised to delete');
-    }
-    // return res.redirect('/');
+    }    
+
+    return res.redirect('/');
 }

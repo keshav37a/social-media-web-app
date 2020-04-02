@@ -5,19 +5,21 @@ const User = require('../models/user');
 // console.log('users_controller');
 
 // For rendering User Profile
-module.exports.profile = function(req, res){
+module.exports.profile = async function(req, res){
     let userId = req.query.uId;
-    User.findById(userId, function(err, user){
-        if(err){
-            console.log(`${err}`);
-            return;
-        }
-        console.log('usersController.profile');
-        return res.render('user_profile', {
-            title: 'UserName Profile',
-            currUser: user
-        });
-    })
+    console.log(req.query);
+    console.log(`userId:  ${userId}`);
+    try{
+        var user = await User.findById(userId);
+        console.log(`user-profile-opened: ${user}`);
+    }
+    catch(err){
+        console.log(`${err}`);
+    }
+    return res.render('user_profile', {
+        title: 'User Profile',
+        currUser: user
+    });
 }
 
 // For rendering User Settings
@@ -51,7 +53,7 @@ module.exports.signup = function(req, res){
 }
 
 // For submission of signup form
-module.exports.createUser = function(req, res){
+module.exports.createUser = async function(req, res){
     console.log('usersController.createUser');
     console.log(req.body);
     //If password and confirm password fields dont match then return
@@ -59,42 +61,31 @@ module.exports.createUser = function(req, res){
         console.log("Passwords do not match");
         return res.redirect('back');
     }
+    try {
+        //If they do match then check if the user is already registered or not
+        let user = await User.findOne({email: req.body.email});
 
-    //If they do match then check if the user is already registered or not
-    User.findOne({email: req.body.email}, function(err, user){
-        if(err){
-            console.log('Error in finding user in sign up');
-            return;
-        }
-
-    //If user entry is not found on the db by email then add the user in the db
+        //If user entry is not found on the db by email then add the user in the db
         if(!user){
-            User.create(req.body, function(err, user){
-                if(err){
-                    console.log('Error in creating user in signup');
-
-                    return;
-                }
-                else{
-                    console.log('New User created');
-                    return res.redirect('/users/signin');
-                }
-            })
+            let createdUser = await User.create(req.body);
+            if(createdUser){
+                console.log('User created');
+                return res.redirect('/users/signin');
+            }
         }
         else{
             console.log('User already exists');
             return res.redirect('back');
-        }
-    })
+        }    
+    } 
+    catch (err) {
+        console.log(`${err}`);   
+    }
 }
 
 // For submission of login form
 module.exports.createSession = function(req, res){
-    // console.log(req.body);
-
-    // return res.render('home', {
-    //     title: 'My Social Media Website'
-    // });
+    //Using passport library
     console.log('usersController.createSession');
     console.log('create session controller called');
     return res.redirect('/');
@@ -107,9 +98,8 @@ module.exports.destroySession = function(req, res){
     return res.redirect('/');
 }
 
-
 //for updating fields in profile form
-module.exports.updateProfile = function(req, res){
+module.exports.updateProfile = async function(req, res){
     console.log('userController.updateProfile called');
     let userId = req.query.uId; 
     let name = req.body.name;
@@ -118,20 +108,17 @@ module.exports.updateProfile = function(req, res){
     console.log(req.body);
 
     if(req.user._id.toString()==userId){
-        User.findByIdAndUpdate(userId, {name: name, email: email}, function(err, user){
-            if(err){
-                console.log(`${err}`);
-                return;
-            }
-            if(user){
-                console.log(`update user fields: ${user.name} ${user.email}`);
-            }
-            return res.redirect('/');
-        })
+        try {
+            let updatedUser = await User.findByIdAndUpdate(userId, {name: name, email:email});
+            if(updatedUser)
+                console.log(`update user fields: ${updatedUser.name} ${updatedUser.email}`);    
+        } 
+        catch (error) {
+            console.log(`${error}`);
+        }
+        return res.redirect('/');
     }
     else{
         return res.status(401).send('Unauthorized');
     }
-
-    
 }
