@@ -1,32 +1,25 @@
-body h1 {
-  margin-left: 1rem; }
-
-section {
-  width: 50%;
-  margin-left: 1rem;
-  margin-right: 1rem; }
-
 #main-content {
   display: flex;
   flex-direction: row;
   justify-content: center; }
-
-#feed-posts {
-  margin-left: 1rem; }
-
-#posts-feed-container .single-post-container {
-  margin-bottom: 5rem;
-  background-color: lightblue; }
-
-.single-comment-container {
-  margin-left: 2rem;
-  margin-bottom: 0.5rem;
-  background-color: lightgreen; }
-
-.item-delete-container {
-  display: flex;
-  flex-direction: row;
-  align-items: start; }
+  #main-content #feed-posts {
+    width: 70%;
+    padding: 10px; }
+    #main-content #feed-posts #posts-feed-container .single-post-container {
+      margin-bottom: 3rem;
+      background-color: lightblue; }
+      #main-content #feed-posts #posts-feed-container .single-post-container .item-delete-container {
+        display: flex;
+        flex-direction: row;
+        align-items: start; }
+      #main-content #feed-posts #posts-feed-container .single-post-container .single-comment-container {
+        margin-left: 2rem;
+        margin-bottom: 0.5rem;
+        background-color: lightgreen; }
+  #main-content #friends-container {
+    width: 30%;
+    padding: 10px;
+    border: 1px solid lightslategray; }
 
 .content {
   flex-grow: 1; }
