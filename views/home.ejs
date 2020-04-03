@@ -6,9 +6,9 @@
         <h4>Posts</h4>
     
         <%  if(locals.user) { %> 
-                <form action="/posts/create-post" method="POST">
-                <textarea name="content" cols="30" rows="4" placeholder="Type Here" required></textarea>
-                <button type="submit">Submit Post</button>
+                <form id="new-post-form" action="/posts/create-post" method="POST">
+                    <textarea name="content" cols="30" rows="4" placeholder="Type Here" required></textarea>
+                    <button type="submit">Submit Post</button>
                 </form>         
                 <br>
              <% }
@@ -35,5 +35,6 @@
     
 </main>
 
-
+<!-- using moment.js to format date -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 <script src="/js/home.js"></script>

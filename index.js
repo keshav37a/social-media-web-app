@@ -4,7 +4,8 @@ const app = express();
 const port = 8000;
 const expressLayouts = require('express-ejs-layouts');
 const db = require('./config/mongoose');
-
+const moment = require('moment');
+// console.log('index>moment: ', moment('2020-04-01 11:46:38.339Z').format('DD MMMM YYYY, hh:mm a'));
 
 //used for session cookie
 const session = require('express-session');
@@ -94,9 +95,17 @@ app.listen(port, function(err){
 
 //errors encountered
 //If no file found error then check current directory or check require modules
+
 //Passport requires callback method - callback method should be outside the brackets '{}' as another arguement of the constructor
+
 //Passport.use was not getting called. It was because I had given wrong name="" in input tag of email in the signin.ejs view. So it was not getting the value for the missing variable so it ws not calling the method. Fuck my life. I spent a whole day looking for the problem :(
+
 //To compare two object ids with same reference in ejs first convert them to string using toString()
+
 //Convert objectId taken from locals.user to string before comparing
+
 //Getting error i not defined in case of partials. Use  <%- include("_post", {i:i}) %> for passing context to the partial
+
 //syntaxerror missing catch or finally after try while compiling ejs - error in opening or closing bracket in if() in ejs file
+
+//Get moment.js functionality by either copying the script.min.js and pasting it in assets as a separate file and importing it in home.ejs or using npm to install and use require to get its functionality and use it on bckend to format the date and send it to the front end. The second way is better

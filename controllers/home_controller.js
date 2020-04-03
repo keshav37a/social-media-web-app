@@ -1,5 +1,6 @@
 const Posts = require('../models/post');
 const User = require('../models/user');
+const moment = require('moment');
 
 module.exports.home = async function(req, res){
     console.log('home-controller.home');
@@ -18,6 +19,22 @@ module.exports.home = async function(req, res){
                     }
                 });
 
+        //Convert mongoose object to normal object otherwise it wont be editable                
+        // let postObjArr = [];
+        // for(let i of posts){
+        //     let postObj = i.toObject();
+        //     let formattedDate = moment(postObj.createdAt).format('hh:mm A, DD MMMM');
+        //     postObj.createdAt = formattedDate;
+        //     let commentObjArr = [];
+        //     for(let j of postObj.comments){
+        //         console.log(j);
+        //         formattedDate = moment(j.createdAt).format('hh:mm A, DD MMMM');
+        //         j.createdAt = formattedDate;
+        //     }
+        //     postObjArr.comments = commentObjArr;
+        //     postObjArr.push(postObj);
+        // }
+
         let users = await User.find({});
 
         return res.render('home', {
@@ -26,7 +43,7 @@ module.exports.home = async function(req, res){
             userAll: users
         })
     }
-    catch{
+    catch(err){
         console.log(`${err}`);
     }
 }

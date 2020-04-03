@@ -9,10 +9,30 @@ module.exports.createPost = async function(req, res){
     try {
         let post = await Post.create({content: req.body.content,
                             user: req.user._id});
+        
         if(post)
             req.flash('success', 'Post published');    
         else
             req.flash('error', 'Failed to publish post');    
+
+        //checking if it has an ajax request or not
+        let postObj = post.toObject();
+        // console.log('req.user:', req.user);
+        // console.log('typeof post: ', typeof(postObj));
+        // console.log('typeof req.user: ', typeof(req.user));
+        postObj['loggedInUser'] = req.user;
+        console.log('post', postObj);
+        if(req.xhr){
+            console.log('req.xhr: ', req.xhr);
+            return res.status(200).json({
+                data:{
+                    post: postObj
+                },
+                message: 'Post created!!'
+            })
+        }
+
+        
     } 
     catch (error) {
         console.log(`${error}`);
