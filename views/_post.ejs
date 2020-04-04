@@ -1,16 +1,14 @@
 <div id="post-<%=i._id%>" class="single-post-container">
     <div>
-        <form method="POST" action="/posts/delete-post/?postOwner=<%=i.user._id%>&postId=<%=i._id%>">
-            <div class="item-delete-container">
-                <div class="content"><%= i.content %></div>
-                <%  
-                    if((locals.user) && (i.user._id.toString() == locals.user._id.toString())) 
-                    {%>
-                        <div class="delete-post-button"><button type="submit">Delete Post</button></div>
-                    <%}
-                %>
-            </div>    
-        </form>
+       <div class="item-delete-container">
+            <div class="content"><%= i.content %></div>
+            <%  
+                if((locals.user) && (i.user._id.toString() == locals.user._id.toString())) 
+                {%>
+                    <div><a class="delete-post-button" href="/posts/delete-post/?postOwner=<%=i.user._id%>&postId=<%=i._id%>">X</a></div>
+                <%}
+            %>
+        </div>    
     </div>
 
     <div><%= i.user.name %></div>
@@ -19,7 +17,7 @@
     <% if(locals.user) 
         {%> 
             <div>
-                <form method="POST" action="/comments/post-comment/?post=<%= i._id %>&user=<%= locals.user._id %>">
+                <form class="comment-submit-form" method="POST" action="/comments/post-comment/?post=<%= i._id %>&user=<%= locals.user._id %>">
                     <textarea name="content" cols="30" rows="1"></textarea>
                     <button type="submit">Post Comment</button>
                 </form>
@@ -27,7 +25,7 @@
         <%}
     %>
 
-    <div class="comments-container">
+    <div id="comments-container-post-<%=i._id%>">
     <% 
         for(let j of i.comments) 
         {%> 

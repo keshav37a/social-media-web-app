@@ -109,3 +109,7 @@ app.listen(port, function(err){
 //syntaxerror missing catch or finally after try while compiling ejs - error in opening or closing bracket in if() in ejs file
 
 //Get moment.js functionality by either copying the script.min.js and pasting it in assets as a separate file and importing it in home.ejs or using npm to install and use require to get its functionality and use it on bckend to format the date and send it to the front end. The second way is better
+
+//Instead of using forms all the time use href and a tags for operations like delete
+
+//Keep using hard refresh because your old code is cached and new changes arent reflected even in case of npm start

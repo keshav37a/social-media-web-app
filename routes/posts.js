@@ -10,4 +10,4 @@ const postsController = require('../controllers/posts_controller');
 //code to create a post by this route
 router.post('/create-post', passport.checkAuthentication,  postsController.createPost);
 
-router.post('/delete-post', postsController.deletePost);
+router.get('/delete-post', postsController.deletePost);

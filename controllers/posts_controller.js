@@ -62,7 +62,15 @@ module.exports.deletePost = async function(req, res){
                 }
             }
             foundPost.remove();
-            req.flash('success', 'Post and associated comments removed');    
+            req.flash('success', 'Post and associated comments removed');
+            if(req.xhr){
+                return res.status(200).json({
+                    data: {
+                        post_id: postId
+                    },
+                    message: 'Post deleted successfully'
+                });
+            }    
         }
         catch (error) {
             console.log(`${error}`);

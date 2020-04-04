@@ -13,7 +13,7 @@ module.exports.postComment = async function(req, res){
     let foundPost = await Post.findById(postId);
     //if post is found
     if(foundPost){
-        console.log(`foundPost: ${foundPost}`);
+        // console.log(`foundPost: ${foundPost}`);
 
         try {
             let createdComment = await Comment.create({content: content,
@@ -22,6 +22,18 @@ module.exports.postComment = async function(req, res){
             console.log(`createdComment: ${createdComment}`);
             foundPost.comments.push(createdComment);
             await foundPost.save();    
+
+            if(req.xhr){
+                console.log('req.xhr: ', req.xhr);
+                return res.status(200).json({
+                    data:{
+                        comment: createdComment,
+                        userName: req.user.name
+                    },
+                    message: 'Post created!!'
+                });
+            }
+    
             req.flash('success', 'Comment added');    
         } 
         catch (err) {
