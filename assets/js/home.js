@@ -1,5 +1,3 @@
-
-
 console.log('Home Script Loaded');
 // console.log(moment());
 //method to submit form data for new post using ajax
@@ -28,19 +26,29 @@ let createPost = function(){
 
                 let domPostItem = createDomPost(data.data.post);
 
-                deletePost($('.delete-post-button', domPostItem));
+                deletePost($(' .delete-post-button', domPostItem));
                 // createComment($('.comment-submit-form', domPostItem));
-                $('.comment-submit-form', domPostItem).each(function(){
+                $(' .comment-submit-form', domPostItem).each(function(){
                     console.log($(this));
                     createComment($(this));
                 })
-                $('.delete-comment-button', domPostItem).each(function(){
+                $(' .delete-comment-button', domPostItem).each(function(){
                     deleteComment($(this));
                 })
 
-                $('#posts-feed-container').prepend(domPostItem);
+                $(' #posts-feed-container').prepend(domPostItem);
 
                 $('#new-post-form')[0].reset();
+
+                new Noty({
+                    theme: 'relax',
+                    text: "Post Created",
+                    type: 'success',
+                    layout: 'topRight',
+                    timeout: 1500
+                    
+                }).show();
+
             }, error: function(error){
                 console.log(error.responseText);
             }
@@ -61,6 +69,16 @@ let deletePost = function(deleteLink){
             success: function(data) {
                 console.log('on success: deletePost');
                 $(`#post-${data.data.post_id}`).remove();
+
+                new Noty({
+                    theme: 'relax',
+                    text: "Post Deleted",
+                    type: 'success',
+                    layout: 'topRight',
+                    timeout: 1500
+                    
+                }).show();
+
             }, error: function(err){
                 console.log(error.responseText);
             }
@@ -82,6 +100,16 @@ let deleteComment = function(deleteLinkItem){
                 console.log('on success: deleteComment');
                 console.log(data);
                 $(`#comment-${data.data.commentId}`).remove();
+
+                new Noty({
+                    theme: 'relax',
+                    text: "Comment deleted",
+                    type: 'success',
+                    layout: 'topRight',
+                    timeout: 1500
+                    
+                }).show();
+
             }, error: function(err) {
                 console.log(err.responseText);
             }
@@ -106,13 +134,23 @@ let createComment = function(createCommentForm){
                 data.data.comment.createdAt = formattedDate;
                 let newComment = createDomComment(data);
 
-                $('.delete-comment-button', newComment).each(function(){
+                $(' .delete-comment-button', newComment).each(function(){
                     deleteComment($(this));
                 })
 
                 $(commentsList).prepend(newComment);
                 console.log(data);
                 console.log(`${createCommentForm}`);
+
+                new Noty({
+                    theme: 'relax',
+                    text: "Comment added",
+                    type: 'success',
+                    layout: 'topRight',
+                    timeout: 1500
+                    
+                }).show();
+
                 // $(createCommentForm).reset();
             },error: function(error){
                 console.log('error:', error.responseText);
