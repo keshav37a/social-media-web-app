@@ -23,7 +23,7 @@ module.exports.createPost = async function(req, res){
         postObj['loggedInUser'] = req.user;
         console.log('post', postObj);
         if(req.xhr){
-            console.log('req.xhr: ', req.xhr);
+            console.log('req.xhr in create post: ', req.xhr);
             return res.status(200).json({
                 data:{
                     post: postObj

@@ -113,3 +113,5 @@ app.listen(port, function(err){
 //Instead of using forms all the time use href and a tags for operations like delete
 
 //Keep using hard refresh because your old code is cached and new changes arent reflected even in case of npm start
+
+//When I create ajax for new post and add its html to the page via ajax I need to add its delete link to the other function which gives it the ajax calling on click by calling the deleteLink on the new post to allow the delete to listen to the newly added html

@@ -65,6 +65,30 @@ module.exports.deleteComment = async function(req, res){
             let deletedCommentPromise = Comment.findByIdAndDelete(commentId);
             const updatedPost = await updatedPostPromise;
             const deletedComment = await deletedCommentPromise;
+
+            if(req.xhr){
+                console.log('req.xhr in delete comment: ', req.xhr);
+                return res.status(200).json({
+                    data:{
+                        commentId: commentId,
+                        postId: postId
+                    },
+                    message: ' Comment Deleted!!'
+                })
+            }
+    
+
+            // if(req.xhr){
+            //     console.log(`req.xhr in deletecomment: ${req.xhr}`);
+            //     return res.status(200).json({
+            //         data:{
+            //             name: 'Keshav',
+            //             commentId: commentId,
+            //             postId: postId
+            //         },
+            //         message: 'Deleted Comment Successfully'
+            //     })
+            // }
             req.flash('success', 'Comment removed');    
         } 
         catch (error) {
