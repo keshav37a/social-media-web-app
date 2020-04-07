@@ -5,7 +5,7 @@
             <%  
                 if((locals.user) && (i.user._id.toString() == locals.user._id.toString())) 
                 {%>
-                    <div><a class="delete-post-button" href="/posts/delete-post/?postOwner=<%=i.user._id%>&postId=<%=i._id%>">X</a></div>
+                    <div><a id="link-<%=i._id%>" class="delete-post-link" href="/posts/delete-post/?postOwner=<%=i.user._id%>&postId=<%=i._id%>">X</a></div>
                 <%}
             %>
         </div>    
@@ -17,7 +17,7 @@
     <% if(locals.user) 
         {%> 
             <div>
-                <form class="comment-submit-form" method="POST" action="/comments/post-comment/?post=<%= i._id %>&user=<%= locals.user._id %>">
+                <form id="new-comment-form-<%=i._id%>" class="comment-submit-form" method="POST" action="/comments/post-comment/?post=<%= i._id %>&user=<%= locals.user._id %>">
                     <textarea name="content" cols="30" rows="1"></textarea>
                     <button type="submit">Post Comment</button>
                 </form>
@@ -25,7 +25,7 @@
         <%}
     %>
 
-    <div id="comments-container-post-<%=i._id%>">
+    <div class="comments-container" id="comments-container-post-<%=i._id%>">
     <% 
         for(let j of i.comments) 
         {%> 

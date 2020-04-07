@@ -115,3 +115,7 @@ app.listen(port, function(err){
 //Keep using hard refresh because your old code is cached and new changes arent reflected even in case of npm start
 
 //When I create ajax for new post and add its html to the page via ajax I need to add its delete link to the other function which gives it the ajax calling on click by calling the deleteLink on the new post to allow the delete to listen to the newly added html
+
+//So partial logging was being done. The functions that were called the logs in some of those were not being displayed. The problem was that somehow in the filter option post was written so only those logs were being displayed which had post in them. Spent 1 day scratching my head. Fuck my life
+
+//multiple comments being added when a single submit was done. I had called allPostsToAjax function to add delete comment link into ajax. That way multiple listeners were allocated to a single submit button and hence multiple submissions and deletions were done because multiple times ajax was being called. Reverted to an older branch to figure out what was the issue. Lots of time and effort wasted.

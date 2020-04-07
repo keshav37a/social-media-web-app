@@ -26,16 +26,8 @@ let createPost = function(){
 
                 let domPostItem = createDomPost(data.data.post);
 
-                deletePost($(' .delete-post-button', domPostItem));
-                // createComment($('.comment-submit-form', domPostItem));
-                $(' .comment-submit-form', domPostItem).each(function(){
-                    console.log($(this));
-                    createComment($(this));
-                })
-                $(' .delete-comment-button', domPostItem).each(function(){
-                    deleteComment($(this));
-                })
-
+                addSinglePostToAjax(domPostItem);
+              
                 $(' #posts-feed-container').prepend(domPostItem);
 
                 $('#new-post-form')[0].reset();
@@ -92,6 +84,7 @@ let deleteComment = function(deleteLinkItem){
     console.log('DeleteComment called in home.js script');
     $(deleteLinkItem).click(function(e){
         console.log('deleteComment called on click');
+        console.log($(this).prop('href'));
         e.preventDefault();
         $.ajax({
             type: "get",
@@ -129,18 +122,13 @@ let createComment = function(createCommentForm){
             url: $(createCommentForm).attr('action'),
             success: function(data){
                 console.log('on success: createComment');
-                let commentsList = $(`#comments-container-post-${data.data.comment.post}`);
-                let formattedDate = dateFormatFn(data.data.comment.createdAt);
-                data.data.comment.createdAt = formattedDate;
-                let newComment = createDomComment(data);
-
-                $(' .delete-comment-button', newComment).each(function(){
-                    deleteComment($(this));
-                })
-
-                $(commentsList).prepend(newComment);
                 console.log(data);
-                console.log(`${createCommentForm}`);
+                let postId = data.data.comment.post;
+                let allCommentsContainerForPost = $(`#comments-container-post-${postId}`);
+                let singleCommentContainerNew = createDomComment(data);
+                
+                addSingleCommentToAjaxDelete(singleCommentContainerNew);
+                allCommentsContainerForPost.prepend(singleCommentContainerNew);
 
                 new Noty({
                     theme: 'relax',
@@ -159,38 +147,84 @@ let createComment = function(createCommentForm){
     })
 }
 
+let addSinglePostToAjax = function(postContainer){
+
+    //adding delete post to ajax
+    let deletePostLink = $(' .delete-post-link', postContainer);
+    deletePost(deletePostLink);
+
+    //adding create comment to ajax
+    let commentSubmitForm = $(' .comment-submit-form', postContainer);
+    createComment(commentSubmitForm);
+
+    //adding all comments to ajax
+    addAllCommentsToAjax(postContainer);
+    
+}
+
+let addAllCommentsToAjax = function(postContainer){
+    let commentsContainer = $(' .comments-container', postContainer);
+    commentsContainer.each(function(){
+        let singleCommentContainer = $(this);
+        addSingleCommentToAjaxDelete(singleCommentContainer);
+    })
+}
+
+let addSingleCommentToAjaxDelete = function(singleCommentContainer){
+    let deleteCommentLink = $(' .delete-comment-link', singleCommentContainer);
+    console.log('delete-comment-link');
+    console.log(deleteCommentLink);
+    deleteComment(deleteCommentLink);
+}
 
 
+let addElementsToAjax = function(){
+    createPost();
+    let postsFeedContainer =  $('#posts-feed-container').children();
+
+    //loop through all the posts
+    postsFeedContainer.each(function(){
+        let postContainer = $(this);
+        console.log(postContainer);
+        addSinglePostToAjax(postContainer);
+    })
+}
+
+let formatDateSingle = function(item){
+    
+}
 
 
-$('.date-created').each(function(){
-    let unformattedDate = $(this).text();
-    let formattedDate = dateFormatFn(unformattedDate);
-    $(this).text(formattedDate);
-});
+addElementsToAjax();
 
-$('.comment-submit-form').each(function(){
-    console.log('create comment for each called');
-    let createCommentItem = $(this);
-    // console.log(`createCommentItem: ${createCommentItem}`);
-    createComment(createCommentItem);
-});
+// $('.date-created').each(function(){
+//     let unformattedDate = $(this).text();
+//     let formattedDate = dateFormatFn(unformattedDate);
+//     $(this).text(formattedDate);
+// });
 
-
-$('.delete-post-button').each(function(){
-    console.log('delete post for each called');
-    let deleteLink = $(this);
-    // console.log(`DeleteLink: ${deleteLink}`);
-    deletePost(deleteLink);
-});
+// $('.comment-submit-form').each(function(){
+//     console.log('create comment for each called');
+//     let createCommentItem = $(this);
+//     // console.log(`createCommentItem: ${createCommentItem}`);
+//     createComment(createCommentItem);
+// });
 
 
-$('.delete-comment-button').each(function(){
-    console.log('delete comment for each called');
-    let deleteLink = $(this);
-    // console.log(`delete-comment-button: ${deleteLink}`);
-    deleteComment($(deleteLink));
-})
+// $('.delete-post-link').each(function(){
+//     console.log('delete post for each called');
+//     let deleteLink = $(this);
+//     // console.log(`DeleteLink: ${deleteLink}`);
+//     deletePost(deleteLink);
+// });
+
+
+// $('.delete-comment-link').each(function(){
+//     console.log('delete comment for each called');
+//     let deleteLink = $(this);
+//     // console.log(`delete-comment-button: ${deleteLink}`);
+//     deleteComment($(deleteLink));
+// })
 
 
 
@@ -202,7 +236,7 @@ let createDomPost = function(i){
                     <div>
                         <div class="item-delete-container">
                             <div class="content">${i.content}</div>    
-                            <div><a class="delete-post-button" href="/posts/delete-post/?postOwner=${i.loggedInUser._id}&postId=${i._id}">X</a></div>
+                            <div><a id="link-${i._id}" class="delete-post-link" href="/posts/delete-post/?postOwner=${i.loggedInUser._id}&postId=${i._id}">X</a></div>
                         </div>    
                     </div>
 
@@ -211,12 +245,12 @@ let createDomPost = function(i){
 
                     
                     <div>
-                        <form class="comment-submit-form" method="POST" action="/comments/post-comment/?post=${i._id}&user=${i.loggedInUser._id}">
+                        <form id="new-comment-form-${i._id}" class="comment-submit-form" method="POST" action="/comments/post-comment/?post=${i._id}&user=${i.loggedInUser._id}">
                             <textarea name="content" cols="30" rows="1"></textarea>
                             <button type="submit">Post Comment</button>
                         </form>
                     </div>
-                    <div class="comments-container">
+                    <div class="comments-container" id="comments-container-post-${i._id}">
                     </div>    
                 </div>
             `)}
@@ -226,7 +260,7 @@ let createDomComment = function(data){
                     <div>
                         <div class="item-delete-container">
                             <div class="content">${data.data.comment.content}</div>
-                            <div><a href="/comments/delete-comment/?cId=${data.data.comment._id}&pId=${data.data.comment.post}&uId=${data.data.comment.user}">X</a></div>
+                            <a id="delete-link-comment-${data.data.comment._id}" class="delete-comment-link" href="/comments/delete-comment/?cId=${data.data.comment._id}&pId=${data.data.comment.post}&uId=${data.data.comment.user}">X</a>
                         </div>
                     </div>
                     <div>${data.data.userName}</div>
@@ -234,7 +268,7 @@ let createDomComment = function(data){
                 </div>`;
 }
 
-createPost();
+
 // createComment();
 // deletePost();
 // deleteComment();

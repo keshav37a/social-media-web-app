@@ -23,14 +23,13 @@ module.exports.postComment = async function(req, res){
             foundPost.comments.push(createdComment);
             await foundPost.save();    
 
-            if(req.xhr){
-                console.log('req.xhr: ', req.xhr);
+            if(req.xhr){                
                 return res.status(200).json({
                     data:{
                         comment: createdComment,
                         userName: req.user.name
                     },
-                    message: 'Post created!!'
+                    message: 'Comment created!!'
                 });
             }
     
@@ -65,7 +64,7 @@ module.exports.deleteComment = async function(req, res){
             let deletedCommentPromise = Comment.findByIdAndDelete(commentId);
             const updatedPost = await updatedPostPromise;
             const deletedComment = await deletedCommentPromise;
-
+            console.log(`req.xhr: ${req.xhr}`);
             if(req.xhr){
                 console.log('req.xhr in delete comment: ', req.xhr);
                 return res.status(200).json({
