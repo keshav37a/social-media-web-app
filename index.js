@@ -39,6 +39,9 @@ app.use(cookieParser());
 // To use static files in our app
 app.use(express.static('./assets'));
 
+//To find the image from the folder. Make the uploads path available to the browser
+app.use('/uploads', express.static(__dirname + '/uploads'))
+
 //To use common layouts
 app.use(expressLayouts);
 

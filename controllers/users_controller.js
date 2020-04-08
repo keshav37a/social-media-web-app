@@ -2,6 +2,9 @@ const db = require('../config/mongoose');
 //import our model class for db operations
 const User = require('../models/user');
 
+const fs = require('fs');
+const path = require('path');
+
 // console.log('users_controller');
 
 // For rendering User Profile
@@ -106,13 +109,12 @@ module.exports.destroySession = function (req, res) {
 module.exports.updateProfile = async function (req, res) {
     console.log('userController.updateProfile called');
     let userId = req.query.uId;
-    let name = req.body.name;
-    let email = req.body.email;
+    let newName = req.body.name;
+    let newEmail = req.body.email;
     console.log(`${req.query}    ${userId} `);
     console.log(req.body);
-
+    // console.log(req);
     try {
-
         if (req.user._id.toString() == userId) {
             let updatedUser = await User.findById(userId);
 
@@ -121,20 +123,24 @@ module.exports.updateProfile = async function (req, res) {
                     console.log('*****Multer error: ', err);
                 }
                 console.log(req.file);
-                updatedUser.name = req.body.name;
-                updatedUser.email = req.body.email;
-
+                updatedUser.name = newName;
+                updatedUser.email = newEmail;
                 if(req.file){
-
+                    if(updatedUser.avatar){
+                        console.log(path.join(__dirname, '..', updatedUser.avatar));
+                        fs.unlinkSync(path.join(__dirname, '..', updatedUser.avatar));
+                    }
                     //this is saving the path of the uploaded file into the avatar field in the user
                     updatedUser.avatar = User.avatarPath + '/' + req.file.filename;
+                    console.log(updatedUser.avatar);
                 }
                 //for saving userinfo in db
                 updatedUser.save();
+                console.log(updatedUser);
             })
 
             req.flash('success', 'Profile Updated Successfully');
-            return res.redirect('/');
+            return res.redirect('back');
         }
         else {
             req.flash('error', 'Unauthorized');
@@ -144,5 +150,6 @@ module.exports.updateProfile = async function (req, res) {
     catch (error) {
         req.flash('error', 'Error in updating profile. Please try again later');
         console.log(`${error}`);
+        return res.redirect('back');
     }
 }

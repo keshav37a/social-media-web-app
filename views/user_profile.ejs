@@ -3,6 +3,10 @@
 
 <section id="user-profile">
     <div class="profile-col">
+        <div class="user-img-container">
+            <img src="<%=user.avatar%>" alt="<%=user.name%>" width="100">
+            <p><%=user.avatar%></p>
+        </div>
         <div class="update-field-container">
             <%
                 if(locals.user._id.toString()==currUser._id.toString()) 
@@ -16,12 +20,12 @@
                         <div class="fields-container">
                             <div class="field grow">
                                 <input type="email" name="email" value="<%=locals.user.email%>" size="30" placeholder="Your Email" required>
-                            </div> 
+                            </div>
+                        </div>
                         <div class="fields-container">
                             <div class="field grow">
                                 <input type="file" placeholder="Your Profile Pic" name="avatar">
                             </div>
-                        </div>
                         </div>
                         <div class="fields-container">
                             <div><button type="submit">Submit</button></div>
