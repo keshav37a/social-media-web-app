@@ -5,15 +5,15 @@ const User = require('../models/user');
 // console.log('users_controller');
 
 // For rendering User Profile
-module.exports.profile = async function(req, res){
+module.exports.profile = async function (req, res) {
     let userId = req.query.uId;
     console.log(req.query);
     console.log(`userId:  ${userId}`);
-    try{
+    try {
         var user = await User.findById(userId);
         console.log(`user-profile-opened: ${user}`);
     }
-    catch(err){
+    catch (err) {
         console.log(`${err}`);
     }
     return res.render('user_profile', {
@@ -23,7 +23,7 @@ module.exports.profile = async function(req, res){
 }
 
 // For rendering User Settings
-module.exports.settings = function(req, res){
+module.exports.settings = function (req, res) {
     console.log('usersController.settings');
     return res.render('user_settings', {
         title: 'UserName Settings'
@@ -31,8 +31,8 @@ module.exports.settings = function(req, res){
 }
 
 //For rendering signin page
-module.exports.signin = function(req, res){
-    if(req.isAuthenticated()){
+module.exports.signin = function (req, res) {
+    if (req.isAuthenticated()) {
         return res.redirect('/users/profile');
     }
     console.log('usersController.signin');
@@ -42,8 +42,8 @@ module.exports.signin = function(req, res){
 }
 
 // For rendering signup page
-module.exports.signup = function(req, res){
-    if(req.isAuthenticated()){
+module.exports.signup = function (req, res) {
+    if (req.isAuthenticated()) {
         return res.redirect('/users/profile');
     }
     console.log('usersController.signup');
@@ -53,41 +53,41 @@ module.exports.signup = function(req, res){
 }
 
 // For submission of signup form
-module.exports.createUser = async function(req, res){
+module.exports.createUser = async function (req, res) {
     console.log('usersController.createUser');
     console.log(req.body);
     //If password and confirm password fields dont match then return
-    if(req.body.password != req.body.confirmPassword){
+    if (req.body.password != req.body.confirmPassword) {
         console.log("Passwords do not match");
         return res.redirect('back');
     }
     try {
         //If they do match then check if the user is already registered or not
-        let user = await User.findOne({email: req.body.email});
+        let user = await User.findOne({ email: req.body.email });
 
         //If user entry is not found on the db by email then add the user in the db
-        if(!user){
+        if (!user) {
             let createdUser = await User.create(req.body);
-            if(createdUser){
+            if (createdUser) {
                 req.flash('success', 'User created');
                 return res.redirect('/users/signin');
             }
         }
-        else{
+        else {
             console.log('User already exists');
             req.flash('error', 'User already exists');
             return res.redirect('back');
-        }    
-    } 
+        }
+    }
     catch (err) {
         req.flash('error', err);
-        console.log(`${err}`);   
+        console.log(`${err}`);
         return res.redirect('back');
     }
 }
 
 // For submission of login form
-module.exports.createSession = function(req, res){
+module.exports.createSession = function (req, res) {
     //Using passport library
     console.log('usersController.createSession');
     req.flash('success', 'Logged In Successfully');
@@ -95,7 +95,7 @@ module.exports.createSession = function(req, res){
 }
 
 //for signing out and destroying session
-module.exports.destroySession = function(req, res){
+module.exports.destroySession = function (req, res) {
     console.log('usersController.destroySession');
     req.logout();
     req.flash('success', 'Logged Out Successfully');
@@ -103,29 +103,46 @@ module.exports.destroySession = function(req, res){
 }
 
 //for updating fields in profile form
-module.exports.updateProfile = async function(req, res){
+module.exports.updateProfile = async function (req, res) {
     console.log('userController.updateProfile called');
-    let userId = req.query.uId; 
+    let userId = req.query.uId;
     let name = req.body.name;
     let email = req.body.email;
     console.log(`${req.query}    ${userId} `);
     console.log(req.body);
 
-    if(req.user._id.toString()==userId){
-        try {
-            let updatedUser = await User.findByIdAndUpdate(userId, {name: name, email:email});
-            if(updatedUser)
-                console.log(`update user fields: ${updatedUser.name} ${updatedUser.email}`);    
-        } 
-        catch (error) {
-            req.flash('error', 'Error in updating profile. Please try again later');
-            console.log(`${error}`);
+    try {
+
+        if (req.user._id.toString() == userId) {
+            let updatedUser = await User.findById(userId);
+
+            User.uploadedAvatar(req, res, function(err){
+                if(err){
+                    console.log('*****Multer error: ', err);
+                }
+                console.log(req.file);
+                updatedUser.name = req.body.name;
+                updatedUser.email = req.body.email;
+
+                if(req.file){
+
+                    //this is saving the path of the uploaded file into the avatar field in the user
+                    updatedUser.avatar = User.avatarPath + '/' + req.file.filename;
+                }
+                //for saving userinfo in db
+                updatedUser.save();
+            })
+
+            req.flash('success', 'Profile Updated Successfully');
+            return res.redirect('/');
         }
-        req.flash('success', 'Profile Updated Successfully');
-        return res.redirect('/');
+        else {
+            req.flash('error', 'Unauthorized');
+            return res.status(401).send('Unauthorized');
+        }
     }
-    else{
-        req.flash('error', 'Unauthorized');
-        return res.status(401).send('Unauthorized');
+    catch (error) {
+        req.flash('error', 'Error in updating profile. Please try again later');
+        console.log(`${error}`);
     }
 }

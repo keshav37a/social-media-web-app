@@ -7,7 +7,7 @@
             <%
                 if(locals.user._id.toString()==currUser._id.toString()) 
                 {%> 
-                    <form method="POST" action="/users/profile/update/?uId=<%=currUser._id%>">
+                    <form method="POST" action="/users/profile/update/?uId=<%=currUser._id%>" enctype="multipart/form-data">
                         <div class="fields-container">
                             <div class="field grow">
                                 <input type="text" name="name" value="<%=locals.user.name%>" size="30" placeholder="Your Name" required>
@@ -17,6 +17,11 @@
                             <div class="field grow">
                                 <input type="email" name="email" value="<%=locals.user.email%>" size="30" placeholder="Your Email" required>
                             </div> 
+                        <div class="fields-container">
+                            <div class="field grow">
+                                <input type="file" placeholder="Your Profile Pic" name="avatar">
+                            </div>
+                        </div>
                         </div>
                         <div class="fields-container">
                             <div><button type="submit">Submit</button></div>

@@ -108,9 +108,9 @@ app.listen(port, function(err){
 
 //syntaxerror missing catch or finally after try while compiling ejs - error in opening or closing bracket in if() in ejs file
 
-//Get moment.js functionality by either copying the script.min.js and pasting it in assets as a separate file and importing it in home.ejs or using npm to install and use require to get its functionality and use it on bckend to format the date and send it to the front end. The second way is better
+//Get moment.js functionality by either copying the script.min.js and pasting it in assets as a separate file and importing it in home.ejs or using npm to install and use require to get its functionality and use it on bckend to format the date and send it to the front end or use the cdn to import
 
-//Instead of using forms all the time use href and a tags for operations like delete
+//Instead of using forms all the time use href and a tags for operations like delete. Use get operations in delete
 
 //Keep using hard refresh because your old code is cached and new changes arent reflected even in case of npm start
 
@@ -119,3 +119,5 @@ app.listen(port, function(err){
 //So partial logging was being done. The functions that were called the logs in some of those were not being displayed. The problem was that somehow in the filter option post was written so only those logs were being displayed which had post in them. Spent 1 day scratching my head. Fuck my life
 
 //multiple comments being added when a single submit was done. I had called allPostsToAjax function to add delete comment link into ajax. That way multiple listeners were allocated to a single submit button and hence multiple submissions and deletions were done because multiple times ajax was being called. Reverted to an older branch to figure out what was the issue. Lots of time and effort wasted.
+
+//If you have changed encoding enctype to multipart then you need to handle your text data differently otherwise they would be stored as null in the db and you wont get any values while fetching data in the home page
