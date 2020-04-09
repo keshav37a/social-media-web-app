@@ -111,9 +111,8 @@ module.exports.updateProfile = async function (req, res) {
     let userId = req.query.uId;
     let newName = req.body.name;
     let newEmail = req.body.email;
-    console.log(`${req.query}    ${userId} `);
-    console.log(req.body);
-    console.log(req.name);
+    // console.log(`${req.query}    ${userId} `);
+    console.log('body: ', req.body);
     // console.log(req);
     try {
         if (req.user._id.toString() == userId) {
@@ -123,7 +122,7 @@ module.exports.updateProfile = async function (req, res) {
                 if(err){
                     console.log('*****Multer error: ', err);
                 }
-                console.log(req.file);
+                console.log('file: ', req.file);
                 updatedUser.name = newName;
                 updatedUser.email = newEmail;
                 if(req.file){
@@ -133,7 +132,7 @@ module.exports.updateProfile = async function (req, res) {
                     }
                     //this is saving the path of the uploaded file into the avatar field in the user
                     updatedUser.avatar = User.avatarPath + '/' + req.file.filename;
-                    console.log(updatedUser.avatar);
+                    console.log('updtedUser.avatar: ', updatedUser.avatar);
                 }
                 //for saving userinfo in db
                 updatedUser.save();

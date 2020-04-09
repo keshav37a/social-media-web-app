@@ -15,9 +15,11 @@
             <div class="link-style">
                 <a href="/">Home</a>
             </div>
+            <% if(locals.user) {%>
             <div class="link-style">
-                <a href="/users/profile">Profile</a>
+                <a href="/users/profile/<%= locals.user._id%>">Profile</a>
             </div>
+            <%}%>
         </div>
     </div>
 </body>

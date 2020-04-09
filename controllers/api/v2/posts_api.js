@@ -1,4 +1,6 @@
-module.exports.index = function(req, res){
+let Post = require('../../../models/post');
+
+module.exports.index = function(req, res){                        
     return res.status(200).json({
         data:{
             posts: []
