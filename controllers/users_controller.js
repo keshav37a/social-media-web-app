@@ -113,6 +113,7 @@ module.exports.updateProfile = async function (req, res) {
     let newEmail = req.body.email;
     console.log(`${req.query}    ${userId} `);
     console.log(req.body);
+    console.log(req.name);
     // console.log(req);
     try {
         if (req.user._id.toString() == userId) {
