@@ -125,3 +125,5 @@ app.listen(port, function(err){
 //multiple comments being added when a single submit was done. I had called allPostsToAjax function to add delete comment link into ajax. That way multiple listeners were allocated to a single submit button and hence multiple submissions and deletions were done because multiple times ajax was being called. Reverted to an older branch to figure out what was the issue. Lots of time and effort wasted.
 
 //If you have changed encoding enctype to multipart then you need to handle your text data differently otherwise they would be stored as null in the db and you wont get any values while fetching data in the home page
+
+//For google auth need to register project on console.developers.google.com
