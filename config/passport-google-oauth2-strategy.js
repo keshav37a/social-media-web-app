@@ -11,6 +11,7 @@ passport.use(new googleStrategy({
     clientID: '198457081810-vts6146cjldkc9u95d5qu4c8j2e4tfds.apps.googleusercontent.com',
     clientSecret: 'cz18Hs3dNe15YJygZlWkAuo0',
     callbackURL: 'http://localhost:8000/users/auth/google/callback',
+    },
 
     function(accessToken, refreshToken, profile, done){
 
@@ -18,7 +19,12 @@ passport.use(new googleStrategy({
         User.findOne({email: profile.emails[0].value}).exec(function(err, user){
             if(err){console.log(`error in google-oauth2-strategy: ${err}`);  return; }
 
-            console.log(`profile in googleoauth- ${profile}`);
+            console.log(`profile in googleoauth-`);
+            console.log(profile);
+            console.log('refreshtoken');
+            console.log(refreshToken);
+            console.log('accessToken');
+            console.log(accessToken);
 
             if(user){ 
                 //If found set this user as req.user
@@ -38,7 +44,6 @@ passport.use(new googleStrategy({
             }
         });
     }
-
-}));
+));
 
 module.exports = passport;

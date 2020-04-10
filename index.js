@@ -12,6 +12,7 @@ const session = require('express-session');
 const passport = require('passport');
 const passportLocal = require('./config/passport-local-strategy');
 const passportJWT = require('./config/passport-jwt-strategy');
+const passportGoogle = require('./config/passport-google-oauth2-strategy');
 
 //For local db storage of session cookie so that sign in persists after restarting server
 const MongoStore = require('connect-mongo')(session);
@@ -127,3 +128,5 @@ app.listen(port, function(err){
 //If you have changed encoding enctype to multipart then you need to handle your text data differently otherwise they would be stored as null in the db and you wont get any values while fetching data in the home page
 
 //For google auth need to register project on console.developers.google.com
+
+//If n error like 'requires a callback function' comes then that means that you have given the callback function inside the object containing the rest of the parameters. Have to close the object and give a callback function after it. Happened with both passport-local-strategy and passport-google-oauth-strategy
