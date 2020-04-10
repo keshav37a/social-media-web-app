@@ -11,6 +11,7 @@ const moment = require('moment');
 const session = require('express-session');
 const passport = require('passport');
 const passportLocal = require('./config/passport-local-strategy');
+const passportJWT = require('./config/passport-jwt-strategy');
 
 //For local db storage of session cookie so that sign in persists after restarting server
 const MongoStore = require('connect-mongo')(session);
