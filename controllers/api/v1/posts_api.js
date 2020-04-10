@@ -44,14 +44,22 @@ module.exports.deletePost = async function(req, res){
         let foundPost = await Post.findById(postId);
         console.log(`foundPost: ${foundPost}`);
         if(foundPost){
-            let comments = foundPost.comments;
-            for(let i of comments){
-                await Comment.findByIdAndDelete(i._id);
+            if(foundPost.user == req.user.id){
+                let comments = foundPost.comments;
+                for(let i of comments){
+                    await Comment.findByIdAndDelete(i._id);
+                }
+                foundPost.remove();
+                return res.status(200).json({
+                    message: 'Post and associated comments deleted successfully'
+                });
             }
-            foundPost.remove();
-            return res.status(200).json({
-                message: 'Post and associated comments deleted successfully'
-            });
+            else{
+                return res.status(401).json({
+                    message:'You cannot delete this post'
+                })
+            }
+            
         }
         else{
             return res.status(404).json({
