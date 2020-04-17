@@ -127,6 +127,8 @@ let createComment = function(createCommentForm){
                 let allCommentsContainerForPost = $(`#comments-container-post-${postId}`);
                 let singleCommentContainerNew = createDomComment(data);
                 
+                
+
                 addSingleCommentToAjaxDelete(singleCommentContainerNew);
                 allCommentsContainerForPost.prepend(singleCommentContainerNew);
 

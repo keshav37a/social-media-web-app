@@ -1,6 +1,7 @@
 const Post = require('../models/post');
 const Comment = require('../models/comment');
 var mongoose = require('mongoose');
+const commentsMailer = require('../mailers/comments_mailer');
 
 module.exports.postComment = async function(req, res){
     
@@ -10,19 +11,25 @@ module.exports.postComment = async function(req, res){
     let content = req.body.content;
     console.log(`req: post comment: ${postId} userId: ${userId} content: ${content}`);
 
-    let foundPost = await Post.findById(postId);
-    //if post is found
-    if(foundPost){
-        // console.log(`foundPost: ${foundPost}`);
-
-        try {
-            let createdComment = await Comment.create({content: content,
+    try{
+        let foundPost = await Post.findById(postId);
+        //if post is found
+        if(foundPost){
+            // console.log(`foundPost: ${foundPost}`);
+            let createdComment = await Comment.create({
+                content: content,
                 user: userId, 
                 post: postId});
+
             console.log(`createdComment: ${createdComment}`);
             foundPost.comments.push(createdComment);
-            await foundPost.save();    
+            await foundPost.save(); 
+            
+            createdComment = await createdComment.populate('user', 'name email').execPopulate();
 
+            //Sending the new comment to the mailer
+            commentsMailer.newComment(createdComment);
+            
             if(req.xhr){                
                 return res.status(200).json({
                     data:{
@@ -32,16 +39,16 @@ module.exports.postComment = async function(req, res){
                     message: 'Comment created!!'
                 });
             }
-    
+
             req.flash('success', 'Comment added');    
-        } 
-        catch (err) {
-            console.log(`${err}`);
         }
+        else{
+            req.flash('error', 'Post not found');    
+            console.log(`Post not found`);
+        } 
     }
-    else{
-        req.flash('error', 'Post not found');    
-        console.log(`Post not found`);
+    catch (err) {
+        console.log(`${err}`);
     }
     return res.redirect('/');
 }
