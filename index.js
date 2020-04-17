@@ -103,7 +103,7 @@ app.listen(port, function(err){
 
 //Passport requires callback method - callback method should be outside the brackets '{}' as another arguement of the constructor
 
-//Passport.use was not getting called. It was because I had given wrong name="" in input tag of email in the signin.ejs view. So it was not getting the value for the missing variable so it ws not calling the method. Fuck my life. I spent a whole day looking for the problem :(
+//Passport.use was not getting called. It was because I had given wrong name="" in input tag of email in the signin.ejs view. So it was not getting the value for the missing variable so it ws not calling the method. I spent a whole day looking for the problem :(
 
 //To compare two object ids with same reference in ejs first convert them to string using toString()
 
@@ -121,7 +121,7 @@ app.listen(port, function(err){
 
 //When I create ajax for new post and add its html to the page via ajax I need to add its delete link to the other function which gives it the ajax calling on click by calling the deleteLink on the new post to allow the delete to listen to the newly added html
 
-//So partial logging was being done. The functions that were called the logs in some of those were not being displayed. The problem was that somehow in the filter option post was written so only those logs were being displayed which had post in them. Spent 1 day scratching my head. Fuck my life
+//So partial logging was being done. The functions that were called the logs in some of those were not being displayed. The problem was that somehow in the filter option post was written so only those logs were being displayed which had post in them. Spent 1 day scratching my head. 
 
 //multiple comments being added when a single submit was done. I had called allPostsToAjax function to add delete comment link into ajax. That way multiple listeners were allocated to a single submit button and hence multiple submissions and deletions were done because multiple times ajax was being called. Reverted to an older branch to figure out what was the issue. Lots of time and effort wasted.
 
@@ -130,3 +130,5 @@ app.listen(port, function(err){
 //For google auth need to register project on console.developers.google.com
 
 //If n error like 'requires a callback function' comes then that means that you have given the callback function inside the object containing the rest of the parameters. Have to close the object and give a callback function after it. Happened with both passport-local-strategy and passport-google-oauth-strategy
+
+//Error in rendering template for mailer service. Have to add .ejs extension to the file in the path to work
