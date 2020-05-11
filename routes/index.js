@@ -11,6 +11,7 @@ router.get('/', homeController.home);
 router.use('/users', require('./users'));
 router.use('/posts', require('./posts'));
 router.use('/comments', require('./comment'));
+router.use('/likes', require('./likes'));
 
 //for api
 router.use('/api', require('./api'));

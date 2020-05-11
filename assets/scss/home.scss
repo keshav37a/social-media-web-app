@@ -8,6 +8,25 @@
         padding: 10px;
 
         #posts-feed-container{
+
+            .like-btn-img{
+                height: 1.5rem;
+                width: 1.5rem;
+                padding: 0.5rem;
+            }
+
+            .like-btn-img:hover{
+                cursor: pointer;
+                height: 2rem;
+                width: 2rem;
+                padding-bottom: 0rem;
+                padding-right: 0rem;
+            }
+
+            .like-text{
+                padding: 0.75rem;
+            }
+
             .single-post-container{
                 margin-bottom: 3rem;
                 background-color: lightblue;
@@ -22,6 +41,13 @@
                     margin-left: 2rem;
                     margin-bottom: 0.5rem;
                     background-color: lightgreen;
+                }
+
+                .like-container{
+
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: start;
                 }
             }
         }
