@@ -13,12 +13,15 @@ var postSchema = new mongoose.Schema({
     },
 
     //includes the array of ids of all comments in this post itself
-    comments : [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'comment'
-        }
-    ]
+    comments : [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'comment'
+    }],
+    
+    like : [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'like'
+    }]
 },{
     timestamps: true
 })
