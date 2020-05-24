@@ -5,16 +5,20 @@
             <%
                 if((locals.user) && (j.user._id.toString() == locals.user._id.toString())) 
                     {%> 
-                    <a id="delete-link-comment-<%=j._id%>" class="delete-comment-link" href="/comments/delete-comment/?cId=<%=j._id%>&pId=<%=i._id%>&uId=<%=j.user._id%>" type="submit">X</a> 
+                    <a id="delete-link-comment-<%=j._id%>" class="delete-comment-link" href="/comments/delete-comment/?cId=<%=j._id%>&pId=<%=i._id%>&uId=<%=locals.user._id.toString()%>" type="submit">X</a> 
                 <%}
             %>
         </div>
     </div>
     <div><%=j.user.name%></div>
     <div class="date-created"><%=j.createdAt%></div>
-    <div class="like-container">
-        <div><a href=""><img class="like-btn-img" src="https://image.flaticon.com/icons/svg/633/633991.svg" alt="like-btn-post"></a></div>
-        <div class="like-text">Like</div>
-        <div class="like-text">123</div>
-    </div>    
+    <% if(locals.user) 
+        {%> 
+            <div class="like-container">
+                <div><a class="like-link" href="/likes/toggle?id=<%=j._id%>&type=comment"><img class="like-btn-img" src="https://image.flaticon.com/icons/svg/633/633991.svg" alt="like-btn-post"></a></div>
+                <div class="like-text">Like</div>
+                <div class="like-text">123</div>
+            </div>    
+        <%}
+    %>
 </div>

@@ -18,7 +18,7 @@ var postSchema = new mongoose.Schema({
         ref: 'comment'
     }],
     
-    like : [{
+    likes : [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'like'
     }]

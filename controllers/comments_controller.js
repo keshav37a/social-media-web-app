@@ -68,9 +68,8 @@ module.exports.deleteComment = async function(req, res){
     let postId = req.query.pId;
     let userId = req.query.uId;
 
-    console.log(`commentId: ${commentId} postId ${postId} userId ${userId} loggedInUserId ${loggedInUserId}`);
-
-    if(loggedInUserId.toString() == userId){
+    console.log(`commentId: ${commentId} postId ${postId} userId ${userId.toString()} loggedInUserId ${loggedInUserId}`);
+    if(loggedInUserId.toString() == userId.toString()){
         console.log('authorized to delete');
 
         try {

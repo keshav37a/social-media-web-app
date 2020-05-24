@@ -1,12 +1,18 @@
 console.log('Home Script Loaded');
-// console.log(moment());
+
 //method to submit form data for new post using ajax
 
-let dateFormatFn = function(dateString){
-    console.log('DateFormat fn called');
-    let formattedDate = moment(dateString).format('MMMM DD, hh:mm A');
-    return formattedDate;
+let newNotification = function(text){
+    new Noty({
+        theme: 'relax',
+        text: text,
+        type: 'success',
+        layout: 'topRight',
+        timeout: 1500
+        
+    }).show();
 }
+
 
 let createPost = function(){
     console.log('createPost called');
@@ -19,27 +25,12 @@ let createPost = function(){
             data: newPostForm.serialize(),
             success: function(data){
                 console.log('on success: newPost');
-
-                let unformattedDate = data.data.post.createdAt;
-                let formattedDate = dateFormatFn(unformattedDate);
-                data.data.post.createdAt = formattedDate;
-
                 let domPostItem = createDomPost(data.data.post);
-
                 addSinglePostToAjax(domPostItem);
               
                 $(' #posts-feed-container').prepend(domPostItem);
-
                 $('#new-post-form')[0].reset();
-
-                new Noty({
-                    theme: 'relax',
-                    text: "Post Created",
-                    type: 'success',
-                    layout: 'topRight',
-                    timeout: 1500
-                    
-                }).show();
+                newNotification("Post Created");
 
             }, error: function(error){
                 console.log(error.responseText);
@@ -61,31 +52,22 @@ let deletePost = function(deleteLink){
             success: function(data) {
                 console.log('on success: deletePost');
                 $(`#post-${data.data.post_id}`).remove();
-
-                new Noty({
-                    theme: 'relax',
-                    text: "Post Deleted",
-                    type: 'success',
-                    layout: 'topRight',
-                    timeout: 1500
-                    
-                }).show();
+                newNotification("Post Deleted");
 
             }, error: function(err){
-                console.log(error.responseText);
+                console.log(err.responseText);
             }
         });
-
     })
-    return;
 }
 
 let deleteComment = function(deleteLinkItem){
     console.log('DeleteComment called in home.js script');
+    console.log('deleteLinkItem in ', deleteLinkItem);
     $(deleteLinkItem).click(function(e){
-        console.log('deleteComment called on click');
-        console.log($(this).prop('href'));
         e.preventDefault();
+        console.log('deleteComment called on click ', e.target.id);
+        console.log($(this).prop('href'));
         $.ajax({
             type: "get",
             url: $(deleteLinkItem).prop('href'),
@@ -93,15 +75,7 @@ let deleteComment = function(deleteLinkItem){
                 console.log('on success: deleteComment');
                 console.log(data);
                 $(`#comment-${data.data.commentId}`).remove();
-
-                new Noty({
-                    theme: 'relax',
-                    text: "Comment deleted",
-                    type: 'success',
-                    layout: 'topRight',
-                    timeout: 1500
-                    
-                }).show();
+                newNotification("Comment Deleted");
 
             }, error: function(err) {
                 console.log(err.responseText);
@@ -127,19 +101,18 @@ let createComment = function(createCommentForm){
                 let allCommentsContainerForPost = $(`#comments-container-post-${postId}`);
                 let singleCommentContainerNew = createDomComment(data);
                 
-                
+                console.log('singleCommentContainerNew: ', $(singleCommentContainerNew));
+                let deleteLink = $('.delete-comment-link', $(singleCommentContainerNew));
+                deleteComment(deleteLink);
+                addSingleCommentToAjaxDelete($(singleCommentContainerNew));
 
-                addSingleCommentToAjaxDelete(singleCommentContainerNew);
+                let likeContainer = $('.like-container', $(singleCommentContainerNew));
+                addSingleLikeToAjax($(likeContainer));
+
+                // addAllLikesToAjax($(singleCommentContainerNew));
+
                 allCommentsContainerForPost.prepend(singleCommentContainerNew);
-
-                new Noty({
-                    theme: 'relax',
-                    text: "Comment added",
-                    type: 'success',
-                    layout: 'topRight',
-                    timeout: 1500
-                    
-                }).show();
+                newNotification('Comment Added');
 
                 // $(createCommentForm).reset();
             },error: function(error){
@@ -147,6 +120,43 @@ let createComment = function(createCommentForm){
             }
         });
     })
+}
+
+let likePostOrComment = function(likeLinkItem){
+    console.log(`likePostOrComment called`);
+    $(likeLinkItem).click((e)=>{
+        e.preventDefault();
+        console.log('likePostOrComment called on click');
+        console.log($(likeLinkItem).prop('href'));
+        $.ajax({
+            type: "post",
+            url: $(likeLinkItem).prop('href'),
+            success: function(data) {
+                console.log('on success: likeLinkItem');
+                console.log(data);
+
+            }, error: function(err) {
+                console.log(err.responseText);
+            }
+        });
+    })
+}
+
+let addAllLikesToAjax = function(postOrCommentContainer){
+    let likeContainers = $('.like-container', postOrCommentContainer);
+    $(likeContainers).each((index, element)=>{
+        let singleLikeContainer = $(element);
+        addSingleLikeToAjax(singleLikeContainer);
+    })
+    // likeContainers.each(function(){
+    //     let singleLikeContainer = $(this);
+    //     addSingleLikeToAjax(singleLikeContainer);
+    // })
+}
+
+let addSingleLikeToAjax = function(likeContainer){
+    let likeLink = $('.like-link', likeContainer);
+    likePostOrComment(likeLink);
 }
 
 let addSinglePostToAjax = function(postContainer){
@@ -161,21 +171,24 @@ let addSinglePostToAjax = function(postContainer){
 
     //adding all comments to ajax
     addAllCommentsToAjax(postContainer);
-    
+
+    //adding likesForPost to ajax
+    addAllLikesToAjax(postContainer);    
 }
 
 let addAllCommentsToAjax = function(postContainer){
-    let commentsContainer = $(' .comments-container', postContainer);
-    commentsContainer.each(function(){
-        let singleCommentContainer = $(this);
+    let allCommentsContainer = $(' .comments-container', postContainer);
+    let allSingleCommentContainers = $('.single-comment-container', allCommentsContainer);
+    allSingleCommentContainers.each((index, element)=>{
+        let singleCommentContainer = $(element);
         addSingleCommentToAjaxDelete(singleCommentContainer);
     })
 }
 
 let addSingleCommentToAjaxDelete = function(singleCommentContainer){
-    let deleteCommentLink = $(' .delete-comment-link', singleCommentContainer);
-    console.log('delete-comment-link');
-    console.log(deleteCommentLink);
+    console.log('addSingleCommentToAjaxDelete called');
+    let deleteCommentLink = $('.delete-comment-link', singleCommentContainer);
+    console.log('delete-comment-link: in addSingleCommentToAjaxDelete', deleteCommentLink);
     deleteComment(deleteCommentLink);
 }
 
@@ -185,52 +198,13 @@ let addElementsToAjax = function(){
     let postsFeedContainer =  $('#posts-feed-container').children();
 
     //loop through all the posts
-    postsFeedContainer.each(function(){
-        let postContainer = $(this);
-        console.log(postContainer);
-        addSinglePostToAjax(postContainer);
+    $(postsFeedContainer).each((index, element)=>{
+        let postContainer = $(element);
+        addSinglePostToAjax($(postContainer));
     })
 }
 
-let formatDateSingle = function(item){
-    
-}
-
-
 addElementsToAjax();
-
-// $('.date-created').each(function(){
-//     let unformattedDate = $(this).text();
-//     let formattedDate = dateFormatFn(unformattedDate);
-//     $(this).text(formattedDate);
-// });
-
-// $('.comment-submit-form').each(function(){
-//     console.log('create comment for each called');
-//     let createCommentItem = $(this);
-//     // console.log(`createCommentItem: ${createCommentItem}`);
-//     createComment(createCommentItem);
-// });
-
-
-// $('.delete-post-link').each(function(){
-//     console.log('delete post for each called');
-//     let deleteLink = $(this);
-//     // console.log(`DeleteLink: ${deleteLink}`);
-//     deletePost(deleteLink);
-// });
-
-
-// $('.delete-comment-link').each(function(){
-//     console.log('delete comment for each called');
-//     let deleteLink = $(this);
-//     // console.log(`delete-comment-button: ${deleteLink}`);
-//     deleteComment($(deleteLink));
-// })
-
-
-
-
 
 //method to create a post in DOM
 let createDomPost = function(i){
@@ -241,9 +215,9 @@ let createDomPost = function(i){
                             <div><a id="link-${i._id}" class="delete-post-link" href="/posts/delete-post/?postOwner=${i.loggedInUser._id}&postId=${i._id}">X</a></div>
                         </div>    
                     </div>
-
+                    
                     <div>${i.loggedInUser.name}</div>
-                    <div class="date-created">${i.createdAt}</div>
+                    <div class="date-created">${moment(i.createdAt).format('MMMM DD, hh:mm A')}</div>
 
                     
                     <div>
@@ -252,21 +226,31 @@ let createDomPost = function(i){
                             <button type="submit">Post Comment</button>
                         </form>
                     </div>
+                    <div class="like-container">
+                        <div><a class="like-link" href="/likes/toggle?id=${i._id}&type=post"><img class="like-btn-img" src="https://image.flaticon.com/icons/svg/633/633991.svg" alt="like-btn-post"></a></div>
+                        <div class="like-text">Like</div>
+                        <div class="like-text">123</div>
+                    </div>    
                     <div class="comments-container" id="comments-container-post-${i._id}">
                     </div>    
                 </div>
             `)}
 
 let createDomComment = function(data){
-        return `<div class="single-comment-container">
+        return `<div class="single-comment-container" id="comment-${data.data.comment._id}">
                     <div>
                         <div class="item-delete-container">
                             <div class="content">${data.data.comment.content}</div>
-                            <a id="delete-link-comment-${data.data.comment._id}" class="delete-comment-link" href="/comments/delete-comment/?cId=${data.data.comment._id}&pId=${data.data.comment.post}&uId=${data.data.comment.user}">X</a>
+                            <a id="delete-link-comment-${data.data.comment._id}" class="delete-comment-link" href="/comments/delete-comment/?cId=${data.data.comment._id}&pId=${data.data.comment.post}&uId=${data.data.comment.user._id}" type="submit">X</a>
                         </div>
                     </div>
                     <div>${data.data.userName}</div>
-                    <div class="date-created">${data.data.comment.createdAt}</div>
+                    <div class="date-created">${moment(data.data.comment.createdAt).format('MMMM DD, hh:mm A')}</div>
+                    <div class="like-container">
+                        <div><a class="like-link" href="/likes/toggle?id=${data.data.comment._id}&type=comment"><img class="like-btn-img" src="https://image.flaticon.com/icons/svg/633/633991.svg" alt="like-btn-post"></a></div>
+                        <div class="like-text">Like</div>
+                        <div class="like-text">123</div>
+                    </div>    
                 </div>`;
 }
 
@@ -278,3 +262,9 @@ let createDomComment = function(data){
 //Issues
 //on new post new comments arent reflecting using ajax
 //Delete not returning any data after ajax call
+
+//Working
+//Create post on ajax working for new post
+//Create comment on ajax working
+//Delete comment not working on ajax for new comment
+//Like Post working on ajax for new post

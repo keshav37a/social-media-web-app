@@ -1,19 +1,57 @@
-module.exports.likePost = function(req, res){
-    req.flash('success', 'Like this Post +1');
-    return res.redirect('back');
-}
+const Likes = require('../models/like');
+const Comments = require('../models/comment');
+const Posts = require('../models/post');
 
-module.exports.likeComment = (req, res)=>{
-    req.flash('success', 'Like this Comment +1');
-    return res.redirect('back');
-}
+module.exports.toggleLike = async (req, res)=>{
 
-module.exports.unlikePost = (req, res)=>{
-    req.flash('success', 'unLike this Post -1');
-    return res.redirect('back');
-}
+    try{
+        '/likes/toggle/?id=postOrCommentId&type=postOrComment'
+        console.log('toggleLike called');
+        console.log(req.query);
+        let likeable;
+        let deleted = false;
 
-module.exports.unlikeComment = (req, res)=>{
-    req.flash('success', 'unLike this Comment -1');
-    return res.redirect('back');
+        if(req.query.type=='post'){
+            likeable = await Posts.findById(req.query.id).populate('likes');
+        }
+        else{
+            likeable = await Comments.findById(req.query.id).populate('likes');
+        }
+
+        //check if a like already exists
+        let existingLike = await Likes.findOne({
+            user: req.user._id,
+            likeable: req.query.id,
+            onModel: req.query.type
+        });
+
+        if(existingLike){
+            likeable.likes.pull(existingLike);
+            likeable.save();
+            existingLike.remove();
+
+            deleted = true;
+        }
+        else{
+            let newLike = await Likes.create({
+                user: req.user._id,
+                likeable: req.query.id,
+                onModel: req.query.type
+            });
+            console.log(likeable);
+            likeable.likes.push(newLike);
+            likeable.save();
+        }
+
+        return res.status(200).json({
+            data: deleted,
+            message: 'Like Toggled'
+        });
+    }
+    catch(err){
+        console.log(err);
+        return res.status(500).json({
+            message: 'Internal Server Error'
+        });
+    }
 }
