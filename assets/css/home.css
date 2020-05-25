@@ -17,6 +17,8 @@
       padding-right: 0rem; }
     #main-content #feed-posts #posts-feed-container .like-text {
       padding: 0.75rem; }
+    #main-content #feed-posts #posts-feed-container .like-count {
+      padding: 0.75rem; }
     #main-content #feed-posts #posts-feed-container .single-post-container {
       margin-bottom: 3rem;
       background-color: lightblue; }

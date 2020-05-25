@@ -42,9 +42,12 @@ module.exports.toggleLike = async (req, res)=>{
             likeable.likes.push(newLike);
             likeable.save();
         }
-
         return res.status(200).json({
-            data: deleted,
+            data: {
+                isLiked: !deleted,
+                likeable: likeable,
+                type: req.query.type
+            },
             message: 'Like Toggled'
         });
     }
@@ -54,4 +57,23 @@ module.exports.toggleLike = async (req, res)=>{
             message: 'Internal Server Error'
         });
     }
+}
+
+module.exports.getAllLikeablesLikedByUser = async (req, res)=>{
+    try{
+        let userId = req.params.id;
+        console.log('getAllLikeablesLikedByUser called: ', userId);
+        let likesByUser = await Likes.find({user: userId});
+        return res.status(200).json({
+            data: likesByUser,
+            message: 'Successful'
+        });
+    }
+    catch(err){
+        return res.status(500).json({
+            message: 'Internal Server Error'
+        });
+    }
+    
+    
 }

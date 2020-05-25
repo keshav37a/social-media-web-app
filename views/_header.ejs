@@ -14,7 +14,7 @@
         <div id="site-heading" class="grow">codeial</div>
         <% if(locals.user) { %>
         <div class="links-container">
-            <div><a href="/users/profile/?uId=<%=user._id%>"><%= user.name %></a></div>
+            <div><a href="/users/profile/?uId=<%=user._id%>" data-user-id="<%=user._id%>" id="user-profile-link"><%= user.name %></a></div>
             <div><a href="/users/sign-out">Sign Out</a></div>
         </div>
         <%} else { %>

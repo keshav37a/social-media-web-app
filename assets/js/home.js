@@ -1,4 +1,30 @@
 console.log('Home Script Loaded');
+let userId = $('#user-profile-link').data()['userId'];
+let likesLikeableIds = $('.like-btn-img');
+console.log(likesLikeableIds);
+console.log($(likesLikeableIds[0]).data());
+console.log(userId);
+if(userId!=undefined){
+    $.ajax({
+        type: 'get',
+        url: `/likes/${userId}`,
+        success: (data)=>{
+            console.log(data);
+            let likeableArray = data.data;
+            for(let i=0; i<likeableArray.length; i++){
+                let likeableItem = likeableArray[i];
+                let likeableId = likeableItem.likeable;
+                let likesLikeableImage = $(`#likeable-${likeableId}`);
+                $(likesLikeableImage).css('filter', 'invert(37%) sepia(59%) saturate(3298%) hue-rotate(196deg) brightness(98%) contrast(102%)');
+                console.log(likesLikeableImage);
+                // let likeable = $('')
+            }
+        },
+        error: (err)=>{
+            console.log(err.responseText);
+        }
+    })
+}
 
 //method to submit form data for new post using ajax
 
@@ -126,20 +152,37 @@ let likePostOrComment = function(likeLinkItem){
     console.log(`likePostOrComment called`);
     $(likeLinkItem).click((e)=>{
         e.preventDefault();
-        console.log('likePostOrComment called on click');
-        console.log($(likeLinkItem).prop('href'));
         $.ajax({
             type: "post",
             url: $(likeLinkItem).prop('href'),
             success: function(data) {
-                console.log('on success: likeLinkItem');
-                console.log(data);
-
+                likeCountAndColorManipulation(likeLinkItem, data);
             }, error: function(err) {
                 console.log(err.responseText);
             }
         });
     })
+}
+
+//Add color and count on like click
+let likeCountAndColorManipulation = (likeLinkItem, data)=>{
+    
+    let likeLinkBtn = $('.like-btn-img', likeLinkItem);
+    let likeContainer = $(likeLinkItem).parent().parent();
+    let likeCount = $('.like-count', likeContainer);
+    
+    let totalLikeCount = data.data.likeable.likes.length;
+    $(likeCount).remove();
+    if(totalLikeCount>0){
+        let likeCountDiv = `<div class="like-count">${totalLikeCount}</div>`;
+        $(likeLinkItem).parent().parent().append(likeCountDiv);
+    }
+    if(data.data.isLiked==true){
+        $(likeLinkBtn).css('filter', 'invert(37%) sepia(59%) saturate(3298%) hue-rotate(196deg) brightness(98%) contrast(102%)');
+    }   
+    else{
+        $(likeLinkBtn).css('filter', 'invert(0%) sepia(100%) saturate(20%) hue-rotate(39deg) brightness(93%) contrast(107%)');
+    }
 }
 
 let addAllLikesToAjax = function(postOrCommentContainer){
@@ -148,10 +191,6 @@ let addAllLikesToAjax = function(postOrCommentContainer){
         let singleLikeContainer = $(element);
         addSingleLikeToAjax(singleLikeContainer);
     })
-    // likeContainers.each(function(){
-    //     let singleLikeContainer = $(this);
-    //     addSingleLikeToAjax(singleLikeContainer);
-    // })
 }
 
 let addSingleLikeToAjax = function(likeContainer){
@@ -227,9 +266,8 @@ let createDomPost = function(i){
                         </form>
                     </div>
                     <div class="like-container">
-                        <div><a class="like-link" href="/likes/toggle?id=${i._id}&type=post"><img class="like-btn-img" src="https://image.flaticon.com/icons/svg/633/633991.svg" alt="like-btn-post"></a></div>
+                        <div><a class="like-link" href="/likes/toggle?id=${i._id}&type=post"><img id=likeable-${i._id} class="like-btn-img" data-likeable-id="${i._id}" src="https://image.flaticon.com/icons/svg/633/633991.svg" alt="like-btn-post"></a></div>
                         <div class="like-text">Like</div>
-                        <div class="like-text">123</div>
                     </div>    
                     <div class="comments-container" id="comments-container-post-${i._id}">
                     </div>    
@@ -247,9 +285,8 @@ let createDomComment = function(data){
                     <div>${data.data.userName}</div>
                     <div class="date-created">${moment(data.data.comment.createdAt).format('MMMM DD, hh:mm A')}</div>
                     <div class="like-container">
-                        <div><a class="like-link" href="/likes/toggle?id=${data.data.comment._id}&type=comment"><img class="like-btn-img" src="https://image.flaticon.com/icons/svg/633/633991.svg" alt="like-btn-post"></a></div>
+                        <div><a class="like-link" href="/likes/toggle?id=${data.data.comment._id}&type=comment"><img id=likeable-${data.data.comment._id} class="like-btn-img" data-likeable-id="${j.data.data.comment._id}" src="https://image.flaticon.com/icons/svg/633/633991.svg" alt="like-btn-post"></a></div>
                         <div class="like-text">Like</div>
-                        <div class="like-text">123</div>
                     </div>    
                 </div>`;
 }

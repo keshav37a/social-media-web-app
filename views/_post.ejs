@@ -23,9 +23,13 @@
                 </form>
             </div>
             <div class="like-container">
-                <div><a class="like-link" href="/likes/toggle?id=<%=i._id%>&type=post"><img class="like-btn-img" src="https://image.flaticon.com/icons/svg/633/633991.svg" alt="like-btn-post"></a></div>
+                <div><a class="like-link" href="/likes/toggle?id=<%=i._id%>&type=post"><img id="likeable-<%=i._id%>" class="like-btn-img" data-likeable-id="<%=i._id%>" src="https://image.flaticon.com/icons/svg/633/633991.svg" alt="like-btn-post"></a></div>
                 <div class="like-text">Like</div>
-                <div class="like-text">123</div>
+                <% 
+                    if(i.likes.length>0) {%> 
+                        <div class="like-count"><%=i.likes.length%></div>    
+                    <%}
+                %>
             </div>    
         <%}
     %>
