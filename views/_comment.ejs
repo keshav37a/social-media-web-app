@@ -18,8 +18,8 @@
                 <div><a class="like-link" href="/likes/toggle?id=<%=j._id%>&type=comment"><img id="likeable-<%=j._id%>" class="like-btn-img" data-likeable-id="<%=j._id%>" src="https://image.flaticon.com/icons/svg/633/633991.svg" alt="like-btn-post"></a></div>
                 <div class="like-text">Like</div>
                 <% 
-                    if(i.likes.length>0) {%> 
-                        <div class="like-count"><%=i.likes.length%></div>    
+                    if(j.likes.length>0) {%> 
+                        <div class="like-count"><%=j.likes.length%></div>    
                     <%}
                 %>
             </div>    

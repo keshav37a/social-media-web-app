@@ -1,9 +1,8 @@
 console.log('Home Script Loaded');
+
+//For getting likes status of user on login // likeable liked or not
 let userId = $('#user-profile-link').data()['userId'];
 let likesLikeableIds = $('.like-btn-img');
-console.log(likesLikeableIds);
-console.log($(likesLikeableIds[0]).data());
-console.log(userId);
 if(userId!=undefined){
     $.ajax({
         type: 'get',
@@ -16,8 +15,6 @@ if(userId!=undefined){
                 let likeableId = likeableItem.likeable;
                 let likesLikeableImage = $(`#likeable-${likeableId}`);
                 $(likesLikeableImage).css('filter', 'invert(37%) sepia(59%) saturate(3298%) hue-rotate(196deg) brightness(98%) contrast(102%)');
-                console.log(likesLikeableImage);
-                // let likeable = $('')
             }
         },
         error: (err)=>{
@@ -27,7 +24,6 @@ if(userId!=undefined){
 }
 
 //method to submit form data for new post using ajax
-
 let newNotification = function(text){
     new Noty({
         theme: 'relax',
@@ -285,7 +281,7 @@ let createDomComment = function(data){
                     <div>${data.data.userName}</div>
                     <div class="date-created">${moment(data.data.comment.createdAt).format('MMMM DD, hh:mm A')}</div>
                     <div class="like-container">
-                        <div><a class="like-link" href="/likes/toggle?id=${data.data.comment._id}&type=comment"><img id=likeable-${data.data.comment._id} class="like-btn-img" data-likeable-id="${j.data.data.comment._id}" src="https://image.flaticon.com/icons/svg/633/633991.svg" alt="like-btn-post"></a></div>
+                        <div><a class="like-link" href="/likes/toggle?id=${data.data.comment._id}&type=comment"><img id=likeable-${data.data.comment._id} class="like-btn-img" data-likeable-id="${data.data.comment._id}" src="https://image.flaticon.com/icons/svg/633/633991.svg" alt="like-btn-post"></a></div>
                         <div class="like-text">Like</div>
                     </div>    
                 </div>`;
