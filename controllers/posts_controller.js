@@ -1,5 +1,6 @@
 const Post = require('../models/post');
 const Comment = require('../models/comment');
+const Like = require('../models/like');
 
 module.exports.createPost = async function(req, res){
     console.log('create post in post_controller called');
@@ -52,15 +53,20 @@ module.exports.deletePost = async function(req, res){
         console.log('authorised to delete');
         try {
             let foundPost = await Post.findById(postId);
-            console.log(`foundPost: ${foundPost}`);
-        // let deletedPost = await Post.findByIdAndDelete(postId);
-           if(foundPost){
-                let comments = foundPost.comments;
-                for(let i of comments){
-                    let deletedComment = await Comment.findByIdAndDelete(i._id);
-                    console.log(`deletedComment: ${deletedComment}`);
-                }
+
+            if(!foundPost){
+                return res.status(404).json({
+                    data: {},
+                    message:'post not found'
+                });
             }
+
+            let comments = foundPost.comments;
+            await Like.deleteMany({likeable: foundPost._id});
+            for(let i=0; i<comments.length; i++){
+                await Like.deleteMany({likeable: comments[i]});
+            }
+            await Comment.deleteMany({_id: {$in:foundPost.comments}});
             foundPost.remove();
             req.flash('success', 'Post and associated comments removed');
             if(req.xhr){

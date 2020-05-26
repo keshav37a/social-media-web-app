@@ -1,5 +1,6 @@
 const Post = require('../models/post');
 const Comment = require('../models/comment');
+const Likes = require('../models/like');
 var mongoose = require('mongoose');
 const commentMailWorker = require('../workers/comment_email_worker');
 const queue = require('../config/kue');
@@ -62,7 +63,6 @@ module.exports.postComment = async function(req, res){
 
 module.exports.deleteComment = async function(req, res){
     console.log('deleteComment in comments_controller called');
-    console.log(req.query);
     let loggedInUserId = req.user._id;
     let commentId = req.query.cId;
     let postId = req.query.pId;
@@ -74,9 +74,13 @@ module.exports.deleteComment = async function(req, res){
 
         try {
             let updatedPostPromise = Post.findByIdAndUpdate(postId, {$pull: {comments: commentId}});
+
             let deletedCommentPromise = Comment.findByIdAndDelete(commentId);
+
             const updatedPost = await updatedPostPromise;
             const deletedComment = await deletedCommentPromise;
+            await Likes.deleteMany({_id: {$in: deletedComment.likes}});
+
             console.log(`req.xhr: ${req.xhr}`);
             if(req.xhr){
                 console.log('req.xhr in delete comment: ', req.xhr);
@@ -88,19 +92,6 @@ module.exports.deleteComment = async function(req, res){
                     message: ' Comment Deleted!!'
                 })
             }
-    
-
-            // if(req.xhr){
-            //     console.log(`req.xhr in deletecomment: ${req.xhr}`);
-            //     return res.status(200).json({
-            //         data:{
-            //             name: 'Keshav',
-            //             commentId: commentId,
-            //             postId: postId
-            //         },
-            //         message: 'Deleted Comment Successfully'
-            //     })
-            // }
             req.flash('success', 'Comment removed');    
         } 
         catch (error) {
