@@ -8,7 +8,6 @@ if(userId!=undefined){
         type: 'get',
         url: `/likes/${userId}`,
         success: (data)=>{
-            console.log(data);
             let likeableArray = data.data;
             for(let i=0; i<likeableArray.length; i++){
                 let likeableItem = likeableArray[i];

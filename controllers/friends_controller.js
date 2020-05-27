@@ -3,7 +3,6 @@ const User = require('../models/user');
 
 module.exports.toggleFriend = async (req, res)=>{
     try{
-        console.log(req.query);
         let fromUserId = req.query.from;
         let toUserId = req.query.to;
         let toggle = req.query.toggle;
@@ -18,7 +17,6 @@ module.exports.toggleFriend = async (req, res)=>{
             //add friendship
             console.log("add friendship condition");
             friendshipStatus = await Friendship.create({from_user: fromUserId, to_user: toUserId});
-            console.log(`newFriendship: ${friendshipStatus}`);
 
             fromUser.friendships.push(friendshipStatus);
             toUser.friendships.push(friendshipStatus);

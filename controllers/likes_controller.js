@@ -5,9 +5,6 @@ const Posts = require('../models/post');
 module.exports.toggleLike = async (req, res)=>{
 
     try{
-        '/likes/toggle/?id=postOrCommentId&type=postOrComment'
-        console.log('toggleLike called');
-        console.log(req.query);
         let likeable;
         let deleted = false;
 
@@ -38,7 +35,6 @@ module.exports.toggleLike = async (req, res)=>{
                 likeable: req.query.id,
                 onModel: req.query.type
             });
-            console.log(likeable);
             likeable.likes.push(newLike);
             likeable.save();
         }
@@ -62,7 +58,6 @@ module.exports.toggleLike = async (req, res)=>{
 module.exports.getAllLikeablesLikedByUser = async (req, res)=>{
     try{
         let userId = req.params.id;
-        console.log('getAllLikeablesLikedByUser called: ', userId);
         let likesByUser = await Likes.find({user: userId});
         return res.status(200).json({
             data: likesByUser,
