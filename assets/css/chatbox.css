@@ -1,0 +1,32 @@
+#chatbox-section {
+  height: 300px;
+  width: 300px;
+  position: sticky;
+  background-color: lightblue;
+  border: 1px solid black;
+  right: 0;
+  bottom: 0;
+  margin-left: auto;
+  overflow-y: scroll; }
+  #chatbox-section .rec-message-div {
+    margin: 1rem 5rem 1rem 1rem;
+    background-color: lightcoral;
+    display: block;
+    padding: 1rem; }
+  #chatbox-section .sent-message-div {
+    margin: 1rem 1rem 1rem 5rem;
+    background-color: lightyellow;
+    display: block;
+    padding: 1rem; }
+  #chatbox-section #send-message-form {
+    position: sticky;
+    bottom: 0.25rem;
+    margin-bottom: 0.25rem; }
+    #chatbox-section #send-message-form #send-message-input-text {
+      padding: 0.25rem;
+      margin-left: 0.25rem; }
+    #chatbox-section #send-message-form #send-message-btn {
+      padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+      background-color: darkgreen;
+      color: white;
+      border: none; }
