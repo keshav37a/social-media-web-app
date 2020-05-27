@@ -51,6 +51,8 @@ module.exports.toggleFriend = async (req, res)=>{
 
         return res.status(200).json({
             data: {
+                from: fromUserId,
+                to: toUserId,
                 isFriendship: isFriendship
             },
             message: 'togglefriend called in friends_controller'

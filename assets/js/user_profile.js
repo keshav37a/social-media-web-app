@@ -1,15 +1,4 @@
 console.log('user_profile script called');
-// if(isFriendship) {%> 
-//     <div class="field">
-//         <a class="friendship-toggle-link" href="/friends/toggle?from=<%=locals.user._id%>&to=<%=currUser._id%>&toggle=0">Remove Friend</a>
-//     </div> 
-// <%}
-
-// else {%> 
-//     <div class="field">
-//         <a class="friendship-toggle-link" href="/friends/toggle?from=<%=locals.user._id%>&to=<%=currUser._id%>&toggle=1">Add Friend</a>
-//     </div> 
-// <%}
 
 $('.friendship-toggle-link').click((event)=>{
     event.preventDefault();
@@ -20,6 +9,23 @@ $('.friendship-toggle-link').click((event)=>{
         url: url,
         success: (data)=>{
             console.log(data);
+            let isFriendship = data.data.isFriendship;
+            let from = data.data.from;
+            let to = data.data.to;
+            let text = '';
+            let toggle = -1;
+            if(isFriendship){
+                toggle = 0;
+                text = 'Remove Friend'
+                $('.friendship-toggle-link').attr('href', `/friends/toggle?from=${from}&to=${to}&toggle=${toggle}`);
+                $('.friendship-toggle-link').text(text);
+            }
+            else{
+                toggle = 1;
+                text = 'Add Friend'
+                $('.friendship-toggle-link').attr('href', `/friends/toggle?from=${from}&to=${to}&toggle=${toggle}`);
+                $('.friendship-toggle-link').text(text);
+            }
         },
         error: (error)=>{
             console.log(error.responseText);
