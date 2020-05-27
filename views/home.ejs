@@ -25,9 +25,19 @@
     </section>
 
     <section id="friends-container">
-        <h4>Friends</h4>
+        <h4>All Users</h4>
         <% for(let user of userAll) {%> 
                 <p><a href="/users/profile/?uId=<%=user._id%>"><%=user.name%></a></p>     
+            <%} 
+        %>
+        
+        <% 
+            if(friendsArr.length>0) {%> 
+                <h4>Friends</h4>
+            <%}
+        %>
+        <% for(let friend of friendsArr) {%> 
+                <p><a href="/users/profile/?uId=<%=friend._id%>"><%=friend.name%></a></p>     
             <%} 
         %>
     </section>
