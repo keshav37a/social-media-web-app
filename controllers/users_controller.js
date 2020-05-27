@@ -9,20 +9,23 @@ const path = require('path');
 
 // For rendering User Profile
 module.exports.profile = async function (req, res) {
-    let userId = req.query.uId;
-    console.log(req.query);
-    console.log(`userId:  ${userId}`);
     try {
-        var user = await User.findById(userId);
-        console.log(`user-profile-opened: ${user}`);
+        let userId = req.query.uId;
+        console.log(req.query);
+        console.log(`userId:  ${userId}`);
+        let currUser = await User.findById(userId);
+        console.log(`user-profile-opened: ${currUser}`);
+        return res.render('user_profile', {
+            title: 'User Profile',
+            currUser: currUser
+        });
     }
     catch (err) {
         console.log(`${err}`);
+        return res.status(500).json({
+            message: 'Internal Server Error'
+        });
     }
-    return res.render('user_profile', {
-        title: 'User Profile',
-        currUser: user
-    });
 }
 
 // For rendering User Settings

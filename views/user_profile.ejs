@@ -3,10 +3,16 @@
 
 <section id="user-profile">
     <div class="profile-col">
-        <div class="user-img-container">
-            <img src="<%=user.avatar%>" alt="<%=user.name%>" width="100">
-            <p><%=user.avatar%></p>
-        </div>
+        <% 
+            if(currUser.avatar) 
+            {%> 
+                <div id="user-img-container">
+                    <img src="<%=currUser.avatar%>" alt="<%=currUser.name%>" width="100">
+                    <p><%=currUser.avatar%></p>
+                </div>
+            <%}
+        %>
+        
         <div class="update-field-container">
             <%
                 if(locals.user._id.toString()==currUser._id.toString()) 
