@@ -1,7 +1,7 @@
 const db = require('../config/mongoose');
 //import our model class for db operations
 const User = require('../models/user');
-
+const Friendship = require('../models/friendship');
 const fs = require('fs');
 const path = require('path');
 
@@ -10,14 +10,23 @@ const path = require('path');
 // For rendering User Profile
 module.exports.profile = async function (req, res) {
     try {
-        let userId = req.query.uId;
+        let currentUserProfileId = req.query.uId;
+        let loggedInUserId = req.user._id;
         console.log(req.query);
-        console.log(`userId:  ${userId}`);
-        let currUser = await User.findById(userId);
-        console.log(`user-profile-opened: ${currUser}`);
+        console.log(`loggedinuser: ${loggedInUserId} userId:  ${currentUserProfileId}`);
+        let currUserProfile = await User.findById(currentUserProfileId);
+        let friendship1 = await Friendship.findOne({from_user: loggedInUserId, to_user: currentUserProfileId});
+        let friendship2 = await Friendship.findOne({from_user: currentUserProfileId, to_user: loggedInUserId});
+        console.log(`friendship1: ${friendship1} and friendship2: ${friendship2}`);
+        let isFriendship = false;
+        if(friendship1 || friendship2)
+            isFriendship = true;
+        console.log(isFriendship);
+        console.log(`user-profile-opened: ${currUserProfile}`);
         return res.render('user_profile', {
             title: 'User Profile',
-            currUser: currUser
+            currUser: currUserProfile,
+            isFriendship: isFriendship
         });
     }
     catch (err) {
