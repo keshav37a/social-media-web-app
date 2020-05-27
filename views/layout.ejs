@@ -28,7 +28,7 @@
 
     <% 
         if(locals.user) {%> 
-            <%- include('chatbox.ejs'); %>        
+            <%- include('_chatbox.ejs'); %>        
         <%}
     %>
     
@@ -67,7 +67,7 @@
         <%
             if(locals.user) 
             {%> 
-                new ChatEngine('user-chatbox', `<%=locals.user._id%>`);    
+                new ChatEngine('user-chatbox', `<%=locals.user%>`);    
             <%}
         %>    
     </script>
